@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Properties</title>
+    <link rel="stylesheet" href="RealEstPrjt.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+      .apply-btn{
+        display: inline-block;
+        margin-top: 8px;
+        padding: 8px 16px;
+        background: rgb(18,18,65);
+        color: #fff;
+        text-decoration: none;
+        font-size: 13px;
+        border-radius: 6px;
+        transition: background-color 0.2s ease, transform 0.15s ease;
+      }
+      .apply-btn:hover{
+        background: rgb(30,30,100);
+        transform: scale(1.04);
+      }
+      .rented-label{
+        display: inline-block;
+        margin-top: 8px;
+        padding: 8px 16px;
+        background: #eee;
+        color: #999;
+        font-size: 13px;
+        border-radius: 6px;
+        font-style: italic;
+      }
+      .landlord-section-label{
+        text-align: center;
+        color: rgb(18,18,65);
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin: 10px 0 20px;
+        opacity: 0.7;
+      }
+      .landlord-grid{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 50px;
+        margin-left: 150px;
+        margin-bottom: 50px;
+      }
+      .landlord-card{
+        background: #fff;
+        width: 300px;
+        border-radius: 8px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .landlord-card:hover{
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(18,18,65,0.18);
+      }
+      .landlord-card .thumb{
+        height: 200px;
+        background: linear-gradient(135deg, rgb(18,18,65), rgb(50,50,120));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 34px;
+      }
+      .landlord-card .body{ padding: 16px; }
+      .landlord-card h3{ font-size: 16px; color: rgb(18,18,65); margin-bottom: 4px; }
+      .landlord-card .price{ font-weight: bold; color: #222; margin-bottom: 6px; }
+      .landlord-card .meta{ font-size: 12px; color: #777; margin-bottom: 10px; }
+      .landlord-card .status-tag{
+        display: inline-block;
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 12px;
+        background: #e6ebfa;
+        color: rgb(18,18,65);
+        margin-bottom: 8px;
+      }
+    </style>
+</head>
+<body>
+        <h1 class="Heading">Available Properties</h1>
+    <div id="landlordListingsWrap"></div>
+    <div class="feature-div">
+
+      <div>
+          <div class="first-img">
+            <p class="forsale-A">For Rent</p>
+          </div>
+      <div>
+                <h3>Sunset Ridge Cottage</h3>
+                <h4>$2200/mo</h4>
+                <i class="bx bxs-map">
+                14 Sunset Ridge, Austin, TX
+                </i>
+      </div>
+             <div class="icon-A">
+                <i class="bx bxs-bed">3 beds</i>
+                <i class="bx bx-bath"></i>
+                <i class="bx bx-area">2400 sqft</i>
+             </div>
+             <a class="apply-btn" href="application.html?id=1&title=Sunset%20Ridge%20Cottage&price=2200&location=14%20Sunset%20Ridge%2C%20Austin%2C%20TX">Apply Now</a>
+      </div>
+      
+      <div>
+        <div class="img2">
+          <p class="forsale-B">For Rent</p></div>
+          <h3>Urban Loft Retreat</h3>
+            <div>
+                <h4>$1800/mo</h4>
+                <i class="bx bxs-map">
+                88 Congress Ave, Austin, TX
+                </i>
+          </div>
+          <div class="icon-B">
+                <i class="bx bxs-bed">2 beds</i>
+                <i class="bx bx-bath"></i>
+                <i class="bx bx-area">1600 sqft</i>
+             </div>
+          <a class="apply-btn" href="application.html?id=2&title=Urban%20Loft%20Retreat&price=1800&location=88%20Congress%20Ave%2C%20Austin%2C%20TX">Apply Now</a>
+      </div>
+      <div>
+        <div class="img3">
+          <p class="forsale-C">For Rent</p></div>
+          <div>
+               <h3>Maple Grove Bungalow</h3>
+                <h4>$1950/mo</h4>
+                <i class="bx bxs-map">
+                321 Maple Street, Austin, TX
+                </i>
+          </div>
+          <div class="icon-C">
+                <i class="bx bxs-bed">3 beds</i>
+                <i class="bx bx-bath"></i>
+                <i class="bx bx-area">2000 sqft</i>
+            </div>
+            <a class="apply-btn" href="application.html?id=3&title=Maple%20Grove%20Bungalow&price=1950&location=321%20Maple%20Street%2C%20Austin%2C%20TX">Apply Now</a>
+      </div>
+    </div>
+
+    
+
+    <div class="feature-div">
+
+      <div>
+          <div class="img4">
+            <p class="forsale-A">For Rent</p>
+          </div>
+      <div>
+                <h3>Lakeside Family Home</h3>
+                <h4>$2600/mo</h4>
+                <i class="bx bxs-map">
+                77 Lakeview Dr, Austin, TX
+                </i>
+      </div>
+             <div class="icon-A">
+                <i class="bx bxs-bed">4 beds</i>
+                <i class="bx bx-bath"></i>
+                <i class="bx bx-area">2800 sqft</i>
+             </div>
+             <a class="apply-btn" href="application.html?id=4&title=Lakeside%20Family%20Home&price=2600&location=77%20Lakeview%20Dr%2C%20Austin%2C%20TX">Apply Now</a>
+      </div>
+      <div>
+        <div class="img5">
+          <p class="forsale-B">For Rent</p></div>
+          <h3>Downtown City Loft</h3>
+            <div>
+                <h4>$1700/mo</h4>
+                <i class="bx bxs-map">
+                500 6th Street, Austin, TX
+                </i>
+          </div>
+          <div class="icon-B">
+                <i class="bx bxs-bed">1 beds</i>
+                <i class="bx bx-bath"></i>
+                <i class="bx bx-area">1100 sqft</i>
+             </div>
+          <a class="apply-btn" href="application.html?id=5&title=Downtown%20City%20Loft&price=1700&location=500%206th%20Street%2C%20Austin%2C%20TX">Apply Now</a>
+      </div>
+      <div>
+        <div class="img6">
+          <p class="forsale-C">For Rent</p></div>
+          <div>
+               <h3>Willow Creek House</h3>
+                <h4>$2100/mo</h4>
+                <i class="bx bxs-map">
+                9 Willow Creek Ln, Austin, TX
+                </i>
+          </div>
+          <div class="icon-C">
+                <i class="bx bxs-bed">3 beds</i>
+                <i class="bx bx-bath"></i>
+                <i class="bx bx-area">2300 sqft</i>
+            </div>
+            <a class="apply-btn" href="application.html?id=6&title=Willow%20Creek%20House&price=2100&location=9%20Willow%20Creek%20Ln%2C%20Austin%2C%20TX">Apply Now</a>
+      </div>
+    </div>
+
+    
+
+    <div class="feature-div">
+
+      <div>
+          <div class="img7">
+            <p class="forsale-A">For Rent</p>
+          </div>
+      <div>
+                <h3>Hilltop Modern Villa</h3>
+                <h4>$3200/mo</h4>
+                <i class="bx bxs-map">
+                44 Hilltop Rd, Austin, TX
+                </i>
+      </div>
+             <div class="icon-A">
+                <i class="bx bxs-bed">4 beds</i>
+                <i class="bx bx-bath"></i>
+                <i class="bx bx-area">3100 sqft</i>
+             </div>
+             <a class="apply-btn" href="application.html?id=7&title=Hilltop%20Modern%20Villa&price=3200&location=44%20Hilltop%20Rd%2C%20Austin%2C%20TX">Apply Now</a>
+      </div>
+      <div>
+        <div class="img8">
+          <p class="forsale-B">For Rent</p></div>
+          <h3>Riverside Garden Home</h3>
+            <div>
+                <h4>$2400/mo</h4>
+                <i class="bx bxs-map">
+                12 Riverside Ave, Austin, TX
+                </i>
+          </div>
+          <div class="icon-B">
+                <i class="bx bxs-bed">3 beds</i>
+                <i class="bx bx-bath"></i>
+                <i class="bx bx-area">2500 sqft</i>
+             </div>
+          <a class="apply-btn" href="application.html?id=8&title=Riverside%20Garden%20Home&price=2400&location=12%20Riverside%20Ave%2C%20Austin%2C%20TX">Apply Now</a>
+      </div>
+      <div>
+        <div class="img9">
+          <p class="forsale-C">For Rent</p></div>
+          <div>
+               <h3>Oakwood Family Residence</h3>
+                <h4>$2050/mo</h4>
+                <i class="bx bxs-map">
+                68 Oakwood Blvd, Austin, TX
+                </i>
+          </div>
+          <div class="icon-C">
+                <i class="bx bxs-bed">3 beds</i>
+                <i class="bx bx-bath"></i>
+                <i class="bx bx-area">2200 sqft</i>
+            </div>
+            <a class="apply-btn" href="application.html?id=9&title=Oakwood%20Family%20Residence&price=2050&location=68%20Oakwood%20Blvd%2C%20Austin%2C%20TX">Apply Now</a>
+      </div>
+    </div>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <h3 class="footer-logo"><i class='bx bx-home-alt'></i> ZeyRi Homes</h3>
+      <p>Helping you find the perfect place to call home. Trusted by thousands of happy renters and homeowners.</p>
+      <div class="footer-socials">
+        <i class="bx bxl-facebook"></i>
+        <i class="bx bxl-twitter"></i>
+        <i class="bx bxl-instagram"></i>
+        <i class="bx bxl-linkedin"></i>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a href="RealEstPrjt.html">Home</a>
+      <a href="property.html">Listings</a>
+      <a href="myapplications.html">My Applications</a>
+      <a href="Login.html">Login / Sign Up</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <p><i class='bx bx-map'></i> 856 Real Estate Ave, Suite 100, Austin, TX 78701</p>
+      <p><i class='bx bx-phone'></i> (412) 564-4567</p>
+      <p><i class='bx bx-envelope'></i> info@zeyrihomes.com</p>
+    </div>
+  </div>
+  <hr class="footer-divider">
+  <p class="footer-bottom">&copy; 2026 ZeyRi Homes. All rights reserved.</p>
+</footer>
+
+</body>
+<script src="RealEstPrjt.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const rented = JSON.parse(localStorage.getItem('zeyriRentedProperties')) || [];
+
+  // Render landlord-posted properties (from the dashboard) at the top
+  const landlordProperties = JSON.parse(localStorage.getItem('zeyriProperties')) || [];
+  const wrap = document.getElementById('landlordListingsWrap');
+
+  if (landlordProperties.length > 0) {
+    const availableOnes = landlordProperties.filter(p => !rented.includes(String(p.id)));
+
+    if (availableOnes.length > 0) {
+      wrap.innerHTML = `
+        <p class="landlord-section-label">Recently Listed</p>
+        <div class="landlord-grid">
+          ${availableOnes.map(p => `
+            <div class="landlord-card">
+              <div class="thumb"><i class='bx bx-building-house'></i></div>
+              <div class="body">
+                <span class="status-tag">${p.status}</span>
+                <h3>${p.title}</h3>
+                <div class="price">$${Number(p.price).toLocaleString()}${p.status === 'For Rent' ? '/mo' : ''}</div>
+                <div class="meta"><i class='bx bxs-map'></i> ${p.location} &middot; ${p.beds} bd &middot; ${p.baths} ba &middot; ${p.sqft} sqft</div>
+                <a class="apply-btn" href="application.html?id=${p.id}&title=${encodeURIComponent(p.title)}&price=${p.price}&location=${encodeURIComponent(p.location)}">Apply Now</a>
+              </div>
+            </div>`).join('')}
+        </div>`;
+    }
+  }
+
+  // Disable Apply buttons for already-rented properties (covers both static and dynamic cards)
+  document.querySelectorAll('.apply-btn').forEach(btn => {
+    const url = new URL(btn.href);
+    const pid = url.searchParams.get('id');
+    if (rented.includes(pid)) {
+      const label = document.createElement('span');
+      label.className = 'rented-label';
+      label.textContent = 'No Longer Available';
+      btn.replaceWith(label);
+    }
+  });
+});
+</script>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log In - ZeyRi Homes</title>
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Arial, sans-serif; }
+  body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    /* background: hsl(220, 60%, 20%); */
+  }
+  .back-link{
+    position:absolute;
+    top:20px;
+    left:20px;
+    color:whitesmoke;
+    text-decoration:none;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    transition: opacity 0.2s ease;
+  }
+  .back-link:hover{ opacity:0.7; }
+
+  .auth-box{
+    background:#fff;
+    width:380px;
+    max-width:90%;
+    padding:40px 30px;
+    border-radius:10px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.3);
+    opacity:0;
+    transform:translateY(20px);
+    animation: fadeUp 0.5s ease forwards;
+  }
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(20px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  .auth-box h2{
+    text-align:center;
+    color: rgb(18,18,65);
+    margin-bottom:6px;
+  }
+  .auth-box p.subtitle{
+    text-align:center;
+    color:#777;
+    font-size:14px;
+    margin-bottom:24px;
+  }
+  .input-group{
+    position:relative;
+    margin-bottom:16px;
+  }
+  .input-group i{
+    position:absolute;
+    left:14px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#999;
+    font-size:18px;
+  }
+  .input-group input{
+    width:100%;
+    padding:12px 12px 12px 42px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:14px;
+    outline:none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .input-group input:focus{
+    border-color: rgb(18,18,65);
+    box-shadow: 0 0 0 3px rgba(18,18,65,0.12);
+  }
+  .input-group input[type="password"],
+  .input-group input.password-field{
+    padding-right: 42px;
+  }
+  .toggle-password{
+    position:absolute;
+    right:14px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:16px;
+    cursor:pointer;
+    opacity:0.5;
+    transition: opacity 0.2s ease;
+  }
+  .toggle-password:hover{ opacity:0.9; }
+  .toggle-password.active{ opacity:1; }
+
+  .options-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:13px;
+    margin-bottom:18px;
+    color:#555;
+  }
+  .options-row label{ display:flex; align-items:center; gap:6px; cursor:pointer; }
+  .options-row a{ color: rgb(18,18,65); text-decoration:none; font-weight:bold; }
+
+  .error-msg{
+    color:#e74c3c;
+    font-size:12px;
+    margin-top:-10px;
+    margin-bottom:14px;
+    display:none;
+  }
+  .success-msg{
+    display:none;
+    text-align:center;
+    color: #1e8449;
+    background:#e3f7e9;
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:16px;
+    font-size:14px;
+  }
+  button.submit-btn{
+    width:100%;
+    padding:12px;
+    background: rgb(18,18,65);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    font-size:15px;
+    cursor:pointer;
+    transition: background-color 0.25s ease, transform 0.15s ease;
+  }
+  button.submit-btn:hover{
+    background: rgb(30,30,100);
+    transform: scale(1.02);
+  }
+  button.submit-btn:active{ transform: scale(0.98); }
+
+  .switch-link{
+    text-align:center;
+    margin-top:18px;
+    font-size:13px;
+    color:#555;
+  }
+  .switch-link a{
+    color: rgb(18,18,65);
+    font-weight:bold;
+    text-decoration:none;
+  }
+  .switch-link a:hover{ text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<a href="RealEstPrjt.html" class="back-link"><i class='bx bx-arrow-back'></i> Back to Home</a>
+
+<div class="auth-box">
+  <h2>Welcome Back</h2>
+  <p class="subtitle">Log in to ZeyRi Homes</p>
+
+  <p class="error-msg" id="loginError">Invalid email or password.</p>
+  <p class="success-msg" id="loginSuccess">✅ Login successful! Redirecting...</p>
+
+  <form id="loginForm">
+    <div class="input-group">
+      <i class='bx bx-envelope'></i>
+      <input type="email" id="email" placeholder="Email Address" required>
+    </div>
+    <div class="input-group">
+      <i class='bx bx-lock-alt'></i>
+      <input type="password" id="password" placeholder="Password" required minlength="6">
+      <span class="toggle-password" data-target="password">👁️</span>
+    </div>
+
+    <div class="options-row">
+      <label><input type="checkbox" id="rememberMe" style="width:auto;"> Remember me</label>
+      <a href="#">Forgot password?</a>
+    </div>
+
+    <button type="submit" class="submit-btn">Log In</button>
+  </form>
+
+  <p class="switch-link">Don't have an account? <a href="Signup.html">Sign Up</a></p>
+</div>
+
+<script>
+// Show/hide password toggle
+document.querySelectorAll('.toggle-password').forEach(icon => {
+  icon.addEventListener('click', function(){
+    const input = document.getElementById(this.dataset.target);
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    this.classList.toggle('active', isHidden);
+  });
+});
+
+document.getElementById('loginForm').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const email = document.getElementById('email').value.trim().toLowerCase();
+  const password = document.getElementById('password').value;
+  const errorMsg = document.getElementById('loginError');
+  errorMsg.style.display = 'none';
+
+  if (password.length < 6) {
+    errorMsg.textContent = 'Must be 6+ characters, with 1 uppercase letter, 1 number, and 1 special character (e.g. @, !, #).';
+    errorMsg.style.display = 'block';
+    return;
+  }
+
+  const users = JSON.parse(localStorage.getItem('zeyriUsers')) || [];
+  const match = users.find(u => u.email === email && u.password === password);
+
+  if (!match) {
+    errorMsg.textContent = 'Invalid email or password.';
+    errorMsg.style.display = 'block';
+    return;
+  }
+
+  // Store the logged-in user for the session, including their role
+  localStorage.setItem('zeyriCurrentUser', JSON.stringify({
+    fullName: match.fullName,
+    email: match.email,
+    role: match.role || 'tenant'
+  }));
+
+  // Show success confirmation before redirecting
+  document.getElementById('loginSuccess').style.display = 'block';
+
+  setTimeout(() => {
+    if (match.role === 'landlord') {
+      window.location.href = 'dashboard.html';
+    } else {
+      window.location.href = 'RealEstPrjt.html';
+    }
+  }, 900);
+});
+</script>
+
+</body>
+</html>

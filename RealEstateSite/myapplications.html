@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Applications - ZeyRi Homes</title>
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Arial, sans-serif; }
+  body{ background:#f4f6fb; min-height:100vh; }
+
+  .topbar{
+    background: hsl(220, 60%, 20%);
+    color:whitesmoke;
+    padding:20px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .topbar a{
+    color:whitesmoke;
+    text-decoration:none;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    transition: opacity 0.2s ease;
+  }
+  .topbar a:hover{ opacity:0.7; }
+
+  .main{ max-width:800px; margin:0 auto; padding:35px 20px; }
+  .main h1{ color: rgb(18,18,65); margin-bottom:22px; font-size:22px; }
+
+  .application-card{
+    background:#fff;
+    border-radius:10px;
+    padding:18px 20px;
+    margin-bottom:14px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.06);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    opacity:0;
+    transform:translateY(15px);
+    animation: fadeUp 0.5s ease forwards;
+  }
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(15px);} to{opacity:1; transform:translateY(0);} }
+
+  .application-card .info h3{ font-size:15px; color: rgb(18,18,65); margin-bottom:4px; }
+  .application-card .info p{ font-size:13px; color:#666; margin-bottom:2px; }
+
+  .status-tag{
+    font-size:12px;
+    padding:5px 14px;
+    border-radius:12px;
+    font-weight:bold;
+    flex-shrink:0;
+  }
+  .status-tag.pending{ background:#fff5e0; color:#b8860b; }
+  .status-tag.approved{ background:#e3f7e9; color:#1e8449; }
+  .status-tag.rejected{ background:#fdeaea; color:#c0392b; }
+
+  .empty-state{
+    text-align:center;
+    color:#888;
+    padding:40px 20px;
+    background:#fff;
+    border-radius:10px;
+  }
+  .notice-msg{
+    text-align:center;
+    color:#555;
+    background:#fff5e0;
+    padding:16px;
+    border-radius:8px;
+    font-size:14px;
+    line-height:1.6;
+    max-width:500px;
+    margin:60px auto 0;
+  }
+  .notice-msg a{ color: rgb(18,18,65); font-weight:bold; }
+
+  .pay-btn{
+    margin-top:12px;
+    padding:10px 20px;
+    background: rgb(18,18,65);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    font-size:13px;
+    cursor:pointer;
+    transition: background-color 0.25s ease, transform 0.15s ease;
+  }
+  .pay-btn:hover{ background: rgb(30,30,100); transform: scale(1.03); }
+
+  .approved-banner{
+    background:#e3f7e9;
+    color:#1e8449;
+    padding:12px 16px;
+    border-radius:8px;
+    font-size:13px;
+    margin-top:12px;
+  }
+
+  /* Payment modal */
+  .overlay{
+    display:none;
+    position:fixed; top:0; left:0; width:100%; height:100%;
+    background:rgba(0,0,0,0.5);
+    align-items:center; justify-content:center;
+    z-index:999;
+  }
+  .overlay.active{ display:flex; }
+  .modal{
+    background:#fff;
+    width:380px;
+    max-width:90%;
+    padding:30px;
+    border-radius:12px;
+    animation: popIn 0.25s ease;
+  }
+  @keyframes popIn{ from{opacity:0; transform:scale(0.9);} to{opacity:1; transform:scale(1);} }
+  .modal h2{ color: rgb(18,18,65); margin-bottom:6px; font-size:18px; }
+  .modal p.modal-subtitle{ font-size:13px; color:#888; margin-bottom:18px; }
+  .modal .field{ margin-bottom:14px; }
+  .modal label{ font-size:13px; color:#555; display:block; margin-bottom:5px; }
+  .modal input{
+    width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; font-size:14px;
+  }
+  .modal .field-row{ display:flex; gap:10px; }
+  .modal .modal-actions{ display:flex; gap:10px; margin-top:20px; }
+  .modal .modal-actions button{ flex:1; padding:10px; border:none; border-radius:8px; cursor:pointer; font-size:14px; }
+  .modal .cancel-btn{ background:#eee; color:#333; }
+  .modal .confirm-pay-btn{ background: rgb(18,18,65); color:#fff; }
+  .disclaimer{ font-size:11px; color:#999; text-align:center; margin-top:14px; }
+
+  .success-screen{
+    text-align:center;
+    padding:20px 10px;
+  }
+  .success-screen i{ font-size:50px; color:#1e8449; margin-bottom:12px; display:block; }
+  .success-screen h2{ color: rgb(18,18,65); margin-bottom:8px; font-size:19px; }
+  .success-screen p{ color:#666; font-size:14px; margin-bottom:20px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div><strong>ZeyRi Homes</strong></div>
+  <a href="RealEstPrjt.html"><i class='bx bx-home-alt'></i> Back to Home</a>
+</div>
+
+<div class="main">
+  <h1>My Applications</h1>
+  <div id="applicationListWrap"></div>
+</div>
+
+<!-- Mock Payment Modal -->
+<div class="overlay" id="paymentOverlay">
+  <div class="modal" id="paymentModalContent">
+    <div id="paymentFormWrap">
+      <h2>Complete Payment</h2>
+      <p class="modal-subtitle" id="paymentSubtitle">Property</p>
+      <form id="paymentForm">
+        <div class="field">
+          <label>Card Number</label>
+          <input type="text" id="cardNumber" placeholder="4242 4242 4242 4242" required maxlength="19">
+        </div>
+        <div class="field-row">
+          <div class="field" style="flex:1;">
+            <label>Expiry</label>
+            <input type="text" id="cardExpiry" placeholder="MM/YY" required maxlength="5">
+          </div>
+          <div class="field" style="flex:1;">
+            <label>CVV</label>
+            <input type="text" id="cardCvv" placeholder="123" required maxlength="4">
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn" id="cancelPaymentBtn">Cancel</button>
+          <button type="submit" class="confirm-pay-btn">Pay Now</button>
+        </div>
+      </form>
+      <p class="disclaimer">This is a simulated payment for demo purposes — no real card is charged.</p>
+    </div>
+
+    <div class="success-screen" id="paymentSuccessWrap" style="display:none;">
+      <i class='bx bx-check-circle'></i>
+      <h2>Payment Successful!</h2>
+      <p>Your first payment went through. You can track future rent and payment history from My Rent.</p>
+      <button class="pay-btn" style="width:100%;" onclick="window.location.href='myrent.html'">Go to My Rent</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const currentUser = JSON.parse(localStorage.getItem('zeyriCurrentUser'));
+const wrap = document.getElementById('applicationListWrap');
+
+if (!currentUser) {
+  wrap.innerHTML = `<div class="notice-msg">Please <a href="Login.html">log in</a> to view your applications.</div>`;
+} else if (currentUser.role === 'landlord') {
+  wrap.innerHTML = `<div class="notice-msg">Landlord accounts don't submit applications. Check the <a href="dashboard.html">Dashboard</a> to review applications from tenants instead.</div>`;
+} else {
+  const allApplications = JSON.parse(localStorage.getItem('zeyriApplications')) || [];
+  const myApplications = allApplications.filter(a => a.tenantEmail === currentUser.email);
+
+  if (myApplications.length === 0) {
+    wrap.innerHTML = `<div class="empty-state">You haven't applied to any properties yet. <a href="property.html">Browse listings</a> to get started.</div>`;
+  } else {
+    // Check which approved properties have already been paid (so we don't show Pay Now again)
+    const allTenants = JSON.parse(localStorage.getItem('zeyriTenants')) || [];
+
+    wrap.innerHTML = myApplications.map((a, i) => {
+      const tenantRecord = allTenants.find(t => t.email === currentUser.email && (t.propertyId === a.propertyId || t.propertyTitle === a.propertyTitle));
+      const alreadyPaid = tenantRecord && tenantRecord.status === 'Paid';
+
+      return `
+      <div class="application-card" style="animation-delay:${i * 0.05}s">
+        <div class="info">
+          <h3>${a.propertyTitle}</h3>
+          <p><i class='bx bxs-map'></i> ${a.propertyLocation || 'N/A'}</p>
+          <p><i class='bx bx-calendar'></i> Move-in requested: ${a.moveInDate || 'Not specified'}</p>
+          ${a.status === 'Approved' ? `
+            <div class="approved-banner">🎉 Your application has been approved! ${alreadyPaid ? 'Your first payment is complete.' : 'You can now proceed to payment.'}</div>
+            ${!alreadyPaid ? `<button class="pay-btn" onclick="openPaymentModal('${a.propertyId}', '${a.propertyTitle.replace(/'/g, "\\'")}', ${a.propertyPrice})">Pay Now</button>` : ''}
+          ` : ''}
+        </div>
+        <span class="status-tag ${a.status.toLowerCase()}">${a.status}</span>
+      </div>`;
+    }).join('');
+  }
+}
+
+// --- Payment flow ---
+let activePropertyId = null;
+
+function openPaymentModal(propertyId, propertyTitle, rentAmount){
+  activePropertyId = propertyId;
+  document.getElementById('paymentSubtitle').textContent = `${propertyTitle} — First payment: $${Number(rentAmount).toLocaleString()}`;
+  document.getElementById('paymentFormWrap').style.display = 'block';
+  document.getElementById('paymentSuccessWrap').style.display = 'none';
+  document.getElementById('paymentOverlay').classList.add('active');
+}
+
+document.getElementById('cancelPaymentBtn').addEventListener('click', () => {
+  document.getElementById('paymentOverlay').classList.remove('active');
+});
+document.getElementById('paymentOverlay').addEventListener('click', function(e){
+  if (e.target === this) this.classList.remove('active');
+});
+
+document.getElementById('paymentForm').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const allTenants = JSON.parse(localStorage.getItem('zeyriTenants')) || [];
+  const tenant = allTenants.find(t => t.email === currentUser.email && (t.propertyId === activePropertyId || t.propertyId === undefined));
+
+  if (tenant) {
+    tenant.status = 'Paid';
+    const nextDue = new Date();
+    nextDue.setDate(nextDue.getDate() + 30);
+    tenant.dueDate = nextDue.toISOString().split('T')[0];
+    if (!tenant.history) tenant.history = [];
+    const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+    tenant.history.unshift({
+      date: new Date().toISOString().split('T')[0],
+      status: 'Paid',
+      method: `Card ending in ${cardNumber.slice(-4) || '0000'}`
+    });
+    localStorage.setItem('zeyriTenants', JSON.stringify(allTenants));
+
+    // Mark this property as no longer available
+    const rented = JSON.parse(localStorage.getItem('zeyriRentedProperties')) || [];
+    if (!rented.includes(activePropertyId)) {
+      rented.push(activePropertyId);
+      localStorage.setItem('zeyriRentedProperties', JSON.stringify(rented));
+    }
+  }
+
+  document.getElementById('paymentFormWrap').style.display = 'none';
+  document.getElementById('paymentSuccessWrap').style.display = 'block';
+  this.reset();
+});
+</script>
+
+</body>
+</html>

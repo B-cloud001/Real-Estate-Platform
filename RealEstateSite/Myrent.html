@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Rent - ZeyRi Homes</title>
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Arial, sans-serif; }
+  body{ background:#f4f6fb; min-height:100vh; }
+
+  .topbar{
+    background: hsl(220, 60%, 20%);
+    color:whitesmoke;
+    padding:20px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .topbar a{
+    color:whitesmoke;
+    text-decoration:none;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    transition: opacity 0.2s ease;
+  }
+  .topbar a:hover{ opacity:0.7; }
+
+  .main{ max-width:700px; margin:0 auto; padding:35px 20px; }
+  .main h1{ color: rgb(18,18,65); margin-bottom:22px; font-size:22px; }
+
+  .rent-card{
+    background:#fff;
+    border-radius:10px;
+    padding:22px 24px;
+    margin-bottom:20px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.06);
+    opacity:0;
+    transform:translateY(15px);
+    animation: fadeUp 0.5s ease forwards;
+  }
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(15px);} to{opacity:1; transform:translateY(0);} }
+
+  .rent-card .top-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:14px;
+  }
+  .rent-card h3{ font-size:17px; color: rgb(18,18,65); margin-bottom:4px; }
+  .rent-card .amount{ font-size:26px; font-weight:bold; color:#222; }
+  .rent-card .amount span{ font-size:13px; color:#888; font-weight:normal; }
+
+  .status-tag{
+    font-size:13px;
+    padding:6px 16px;
+    border-radius:14px;
+    font-weight:bold;
+    flex-shrink:0;
+  }
+  .status-tag.paid{ background:#e3f7e9; color:#1e8449; }
+  .status-tag.pending{ background:#fff5e0; color:#b8860b; }
+  .status-tag.overdue{ background:#fdeaea; color:#c0392b; }
+
+  .history-title{ font-size:13px; color:#888; margin:16px 0 8px; text-transform:uppercase; letter-spacing:0.5px; }
+  .history-item{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    border-top:1px solid #eee;
+    font-size:13px;
+    color:#555;
+  }
+
+  .pay-btn{
+    margin-top:16px;
+    width:100%;
+    padding:12px;
+    background: rgb(18,18,65);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    font-size:14px;
+    cursor:pointer;
+    transition: background-color 0.25s ease, transform 0.15s ease;
+  }
+  .pay-btn:hover{ background: rgb(30,30,100); transform: scale(1.02); }
+
+  /* Payment modal */
+  .overlay{
+    display:none;
+    position:fixed; top:0; left:0; width:100%; height:100%;
+    background:rgba(0,0,0,0.5);
+    align-items:center; justify-content:center;
+    z-index:999;
+  }
+  .overlay.active{ display:flex; }
+  .modal{
+    background:#fff;
+    width:380px;
+    max-width:90%;
+    padding:30px;
+    border-radius:12px;
+    animation: popIn 0.25s ease;
+  }
+  @keyframes popIn{ from{opacity:0; transform:scale(0.9);} to{opacity:1; transform:scale(1);} }
+  .modal h2{ color: rgb(18,18,65); margin-bottom:6px; font-size:18px; }
+  .modal p.modal-subtitle{ font-size:13px; color:#888; margin-bottom:18px; }
+  .modal .field{ margin-bottom:14px; }
+  .modal label{ font-size:13px; color:#555; display:block; margin-bottom:5px; }
+  .modal input{
+    width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; font-size:14px;
+  }
+  .modal .field-row{ display:flex; gap:10px; }
+  .modal .modal-actions{ display:flex; gap:10px; margin-top:20px; }
+  .modal .modal-actions button{ flex:1; padding:10px; border:none; border-radius:8px; cursor:pointer; font-size:14px; }
+  .modal .cancel-btn{ background:#eee; color:#333; }
+  .modal .confirm-pay-btn{ background: rgb(18,18,65); color:#fff; }
+  .disclaimer{
+    font-size:11px;
+    color:#999;
+    text-align:center;
+    margin-top:14px;
+  }
+
+  .empty-state{
+    text-align:center;
+    color:#888;
+    padding:40px 20px;
+    background:#fff;
+    border-radius:10px;
+  }
+  .notice-msg{
+    text-align:center;
+    color:#555;
+    background:#fff5e0;
+    padding:16px;
+    border-radius:8px;
+    font-size:14px;
+    line-height:1.6;
+    max-width:500px;
+    margin:60px auto 0;
+  }
+  .notice-msg a{ color: rgb(18,18,65); font-weight:bold; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div><strong>ZeyRi Homes</strong></div>
+  <a href="RealEstPrjt.html"><i class='bx bx-home-alt'></i> Back to Home</a>
+</div>
+
+<div class="main">
+  <h1>My Rent</h1>
+  <div id="rentWrap"></div>
+</div>
+
+<!-- Mock Payment Modal -->
+<div class="overlay" id="paymentOverlay">
+  <div class="modal">
+    <h2>Pay Rent</h2>
+    <p class="modal-subtitle" id="paymentSubtitle">Property</p>
+    <form id="paymentForm">
+      <div class="field">
+        <label>Card Number</label>
+        <input type="text" id="cardNumber" placeholder="4242 4242 4242 4242" required maxlength="19">
+      </div>
+      <div class="field-row">
+        <div class="field" style="flex:1;">
+          <label>Expiry</label>
+          <input type="text" id="cardExpiry" placeholder="MM/YY" required maxlength="5">
+        </div>
+        <div class="field" style="flex:1;">
+          <label>CVV</label>
+          <input type="text" id="cardCvv" placeholder="123" required maxlength="4">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="cancel-btn" id="cancelPaymentBtn">Cancel</button>
+        <button type="submit" class="confirm-pay-btn">Confirm Payment</button>
+      </div>
+    </form>
+    <p class="disclaimer">This is a simulated payment for demo purposes — no real card is charged.</p>
+  </div>
+</div>
+
+<script>
+function daysUntil(dueDateStr){
+  if (!dueDateStr) return null;
+  const due = new Date(dueDateStr);
+  const today = new Date();
+  due.setHours(0,0,0,0);
+  today.setHours(0,0,0,0);
+  return Math.round((due - today) / (1000 * 60 * 60 * 24));
+}
+
+function dueLabel(t){
+  if (!t.dueDate) return '';
+  const days = daysUntil(t.dueDate);
+  if (t.status === 'Paid') return `<div style="font-size:12px; color:#1e8449; margin-top:6px;">Next payment due ${t.dueDate}</div>`;
+  if (days < 0) return `<div style="font-size:12px; color:#c0392b; font-weight:bold; margin-top:6px;">Overdue by ${Math.abs(days)} day${Math.abs(days) === 1 ? '' : 's'} (was due ${t.dueDate})</div>`;
+  if (days === 0) return `<div style="font-size:12px; color:#b8860b; font-weight:bold; margin-top:6px;">Due today</div>`;
+  return `<div style="font-size:12px; color:#b8860b; margin-top:6px;">Due in ${days} day${days === 1 ? '' : 's'} (${t.dueDate})</div>`;
+}
+
+const currentUser = JSON.parse(localStorage.getItem('zeyriCurrentUser'));
+const wrap = document.getElementById('rentWrap');
+
+if (!currentUser) {
+  wrap.innerHTML = `<div class="notice-msg">Please <a href="Login.html">log in</a> to view your rent status.</div>`;
+} else if (currentUser.role === 'landlord') {
+  wrap.innerHTML = `<div class="notice-msg">Landlord accounts track tenant rent from the <a href="dashboard.html">Dashboard</a> instead.</div>`;
+} else {
+  const allTenants = JSON.parse(localStorage.getItem('zeyriTenants')) || [];
+  const myRecords = allTenants.filter(t => t.email === currentUser.email);
+
+  if (myRecords.length === 0) {
+    wrap.innerHTML = `<div class="empty-state">No rent records yet. Once a landlord approves your application, your rent status will show up here.</div>`;
+  } else {
+    wrap.innerHTML = myRecords.map((t, i) => `
+      <div class="rent-card" style="animation-delay:${i * 0.05}s">
+        <div class="top-row">
+          <div>
+            <h3>${t.propertyTitle}</h3>
+            <div class="amount">$${Number(t.rentAmount).toLocaleString()} <span>/ month</span></div>
+            ${dueLabel(t)}
+          </div>
+          <span class="status-tag ${t.status.toLowerCase()}">${t.status}</span>
+        </div>
+        ${t.status !== 'Paid' ? `<button class="pay-btn" onclick="openPaymentModal(${t.id}, '${t.propertyTitle.replace(/'/g, "\\'")}', ${t.rentAmount})">Pay Rent Now</button>` : ''}
+        ${t.history && t.history.length > 0 ? `
+          <div class="history-title">Payment History</div>
+          ${t.history.map(h => `
+            <div class="history-item">
+              <span>${h.date}</span>
+              <span>${h.status}${h.method ? ' &middot; ' + h.method : ''}</span>
+            </div>`).join('')}
+        ` : `<div class="history-title">No payment history yet</div>`}
+      </div>`).join('');
+  }
+}
+
+// --- Simulated payment flow ---
+let activeTenantId = null;
+
+function openPaymentModal(tenantId, propertyTitle, rentAmount){
+  activeTenantId = tenantId;
+  document.getElementById('paymentSubtitle').textContent = `${propertyTitle} — $${Number(rentAmount).toLocaleString()}`;
+  document.getElementById('paymentOverlay').classList.add('active');
+}
+
+document.getElementById('cancelPaymentBtn').addEventListener('click', () => {
+  document.getElementById('paymentOverlay').classList.remove('active');
+});
+document.getElementById('paymentOverlay').addEventListener('click', function(e){
+  if (e.target === this) this.classList.remove('active');
+});
+
+document.getElementById('paymentForm').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+  const last4 = cardNumber.slice(-4) || '0000';
+
+  const allTenants = JSON.parse(localStorage.getItem('zeyriTenants')) || [];
+  const tenant = allTenants.find(t => t.id === activeTenantId);
+  if (tenant) {
+    tenant.status = 'Paid';
+    const nextDue = new Date();
+    nextDue.setDate(nextDue.getDate() + 30);
+    tenant.dueDate = nextDue.toISOString().split('T')[0];
+    if (!tenant.history) tenant.history = [];
+    tenant.history.unshift({
+      date: new Date().toISOString().split('T')[0],
+      status: 'Paid',
+      method: `Card ending in ${last4}`
+    });
+    localStorage.setItem('zeyriTenants', JSON.stringify(allTenants));
+
+    // Mark this property as no longer available
+    if (tenant.propertyId) {
+      const rented = JSON.parse(localStorage.getItem('zeyriRentedProperties')) || [];
+      if (!rented.includes(tenant.propertyId)) {
+        rented.push(tenant.propertyId);
+        localStorage.setItem('zeyriRentedProperties', JSON.stringify(rented));
+      }
+    }
+  }
+
+  document.getElementById('paymentOverlay').classList.remove('active');
+  this.reset();
+  renderRent();
+});
+
+function renderRent(){
+  location.reload();
+}
+</script>
+
+</body>
+</html>

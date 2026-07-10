@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up - ZeyRi Homes</title>
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Arial, sans-serif; }
+  body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: hsl(220, 60%, 20%);
+    padding: 30px 0;
+  }
+  .back-link{
+    position:absolute;
+    top:20px;
+    left:20px;
+    color:whitesmoke;
+    text-decoration:none;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    transition: opacity 0.2s ease;
+  }
+  .back-link:hover{ opacity:0.7; }
+
+  .auth-box{
+    background:#fff;
+    width:400px;
+    max-width:90%;
+    padding:40px 30px;
+    border-radius:10px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.3);
+    opacity:0;
+    transform:translateY(20px);
+    animation: fadeUp 0.5s ease forwards;
+  }
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(20px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  .auth-box h2{
+    text-align:center;
+    color: rgb(18,18,65);
+    margin-bottom:6px;
+  }
+  .auth-box p.subtitle{
+    text-align:center;
+    color:#777;
+    font-size:14px;
+    margin-bottom:22px;
+  }
+
+  /* Role selector */
+  .role-select{
+    display:flex;
+    gap:12px;
+    margin-bottom:22px;
+  }
+  .role-option{
+    flex:1;
+    border:2px solid #ddd;
+    border-radius:8px;
+    padding:14px 10px;
+    text-align:center;
+    cursor:pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+  .role-option i{ font-size:22px; color:#999; display:block; margin-bottom:6px; transition: color 0.2s ease; }
+  .role-option span{ font-size:13px; color:#555; }
+  .role-option.selected{
+    border-color: rgb(18,18,65);
+    background:#eef0fa;
+  }
+  .role-option.selected i,
+  .role-option.selected span{ color: rgb(18,18,65); }
+
+  .input-group{
+    position:relative;
+    margin-bottom:16px;
+  }
+  .input-group i{
+    position:absolute;
+    left:14px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#999;
+    font-size:18px;
+  }
+  .input-group input{
+    width:100%;
+    padding:12px 12px 12px 42px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:14px;
+    outline:none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .input-group input:focus{
+    border-color: rgb(18,18,65);
+    box-shadow: 0 0 0 3px rgba(18,18,65,0.12);
+  }
+  .input-group input[type="password"],
+  .input-group input.password-field{
+    padding-right: 42px;
+  }
+  .toggle-password{
+    position:absolute;
+    right:14px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:16px;
+    cursor:pointer;
+    opacity:0.5;
+    transition: opacity 0.2s ease;
+  }
+  .toggle-password:hover{ opacity:0.9; }
+  .toggle-password.active{ opacity:1; }
+
+  /* Landlord-only fields */
+  #landlordFields{
+    display:none;
+    overflow:hidden;
+    max-height:0;
+    opacity:0;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+  }
+  #landlordFields.visible{
+    display:block;
+    max-height:200px;
+    opacity:1;
+  }
+
+  .error-msg{
+    color:#e74c3c;
+    font-size:12px;
+    margin-top:-10px;
+    margin-bottom:14px;
+    display:none;
+  }
+  .success-msg{
+    display:none;
+    text-align:center;
+    color: rgb(18,18,65);
+    background:#e6ebfa;
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:16px;
+    font-size:14px;
+  }
+  button.submit-btn{
+    width:100%;
+    padding:12px;
+    background: rgb(18,18,65);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    font-size:15px;
+    cursor:pointer;
+    transition: background-color 0.25s ease, transform 0.15s ease;
+  }
+  button.submit-btn:hover{
+    background: rgb(30,30,100);
+    transform: scale(1.02);
+  }
+  button.submit-btn:active{ transform: scale(0.98); }
+
+  .switch-link{
+    text-align:center;
+    margin-top:18px;
+    font-size:13px;
+    color:#555;
+  }
+  .switch-link a{
+    color: rgb(18,18,65);
+    font-weight:bold;
+    text-decoration:none;
+  }
+  .switch-link a:hover{ text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<a href="RealEstPrjt.html" class="back-link"><i class='bx bx-arrow-back'></i> Back to Home</a>
+
+<div class="auth-box">
+  <h2>Create Account</h2>
+  <p class="subtitle">Join ZeyRi Homes to find your dream property</p>
+
+  <p class="success-msg" id="successMsg">Account created! Redirecting to login...</p>
+
+  <form id="signupForm">
+
+    <!-- Role selector -->
+    <div class="role-select">
+      <div class="role-option selected" id="tenantOption" data-role="tenant">
+        <i class='bx bx-user'></i>
+        <span>I'm a Tenant/Renter</span>
+      </div>
+      <div class="role-option" id="landlordOption" data-role="landlord">
+        <i class='bx bx-building-house'></i>
+        <span>I'm a Landlord</span>
+      </div>
+    </div>
+    <input type="hidden" id="selectedRole" value="tenant">
+
+    <div class="input-group">
+      <i class='bx bx-user'></i>
+      <input type="text" id="fullName" placeholder="Full Name" required>
+    </div>
+
+    <div class="input-group">
+      <i class='bx bx-envelope'></i>
+      <input type="email" id="email" placeholder="Email Address" required>
+    </div>
+    <p class="error-msg" id="emailError">This email is already registered.</p>
+
+    <div class="input-group">
+      <i class='bx bx-phone'></i>
+      <input type="tel" id="phoneNumber" placeholder="Mobile Number" required>
+    </div>
+
+    <!-- Landlord-only fields -->
+    <div id="landlordFields">
+      <div class="input-group">
+        <i class='bx bx-briefcase'></i>
+        <input type="text" id="companyName" placeholder="Company / Business Name (optional)">
+      </div>
+      <div class="input-group">
+        <i class='bx bx-home-alt'></i>
+        <input type="number" id="numProperties" placeholder="Number of Properties You Manage">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <i class='bx bx-lock-alt'></i>
+      <input type="password" id="password" placeholder="Password" required minlength="6">
+      <span class="toggle-password" data-target="password">👁️</span>
+    </div>
+    <p class="error-msg" id="passwordStrengthError">Must be 6+ characters, with 1 uppercase letter, 1 number, and 1 special character (e.g. @, !, #).</p>
+
+    <div class="input-group">
+      <i class='bx bx-lock-alt'></i>
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" required minlength="6">
+      <span class="toggle-password" data-target="confirmPassword">👁️</span>
+    </div>
+    <p class="error-msg" id="passwordError">Passwords do not match.</p>
+
+    <button type="submit" class="submit-btn">Sign Up</button>
+  </form>
+
+  <p class="switch-link">Already have an account? <a href="Login.html">Log In</a></p>
+</div>
+
+<script>
+const tenantOption = document.getElementById('tenantOption');
+const landlordOption = document.getElementById('landlordOption');
+const selectedRoleInput = document.getElementById('selectedRole');
+const landlordFields = document.getElementById('landlordFields');
+
+function selectRole(role){
+  selectedRoleInput.value = role;
+  if (role === 'landlord') {
+    landlordOption.classList.add('selected');
+    tenantOption.classList.remove('selected');
+    landlordFields.classList.add('visible');
+  } else {
+    tenantOption.classList.add('selected');
+    landlordOption.classList.remove('selected');
+    landlordFields.classList.remove('visible');
+  }
+}
+
+tenantOption.addEventListener('click', () => selectRole('tenant'));
+landlordOption.addEventListener('click', () => selectRole('landlord'));
+
+// Show/hide password toggles
+document.querySelectorAll('.toggle-password').forEach(icon => {
+  icon.addEventListener('click', function(){
+    const input = document.getElementById(this.dataset.target);
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    this.classList.toggle('active', isHidden);
+  });
+});
+
+document.getElementById('signupForm').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const fullName = document.getElementById('fullName').value.trim();
+  const email = document.getElementById('email').value.trim().toLowerCase();
+  const phoneNumber = document.getElementById('phoneNumber').value.trim();
+  const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+  const role = selectedRoleInput.value;
+
+  const emailError = document.getElementById('emailError');
+  const passwordError = document.getElementById('passwordError');
+  const passwordStrengthError = document.getElementById('passwordStrengthError');
+  const successMsg = document.getElementById('successMsg');
+  emailError.style.display = 'none';
+  passwordError.style.display = 'none';
+  passwordStrengthError.style.display = 'none';
+
+  const strongEnough = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_\-+=]).{6,}$/.test(password);
+  if (!strongEnough) {
+    passwordStrengthError.style.display = 'block';
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    passwordError.style.display = 'block';
+    return;
+  }
+
+  let users = JSON.parse(localStorage.getItem('zeyriUsers')) || [];
+
+  if (users.find(u => u.email === email)) {
+    emailError.style.display = 'block';
+    return;
+  }
+
+  const newUser = { fullName, email, phoneNumber, password, role };
+
+  if (role === 'landlord') {
+    newUser.companyName = document.getElementById('companyName').value.trim();
+    newUser.numProperties = document.getElementById('numProperties').value;
+  }
+
+  users.push(newUser);
+  localStorage.setItem('zeyriUsers', JSON.stringify(users));
+
+  successMsg.style.display = 'block';
+  document.getElementById('signupForm').reset();
+  selectRole('tenant');
+
+  setTimeout(() => { window.location.href = 'Login.html'; }, 1500);
+});
+</script>
+
+</body>
+</html>

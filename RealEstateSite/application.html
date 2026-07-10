@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apply - ZeyRi Homes</title>
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Arial, sans-serif; }
+  body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: hsl(220, 60%, 20%);
+    padding: 30px 0;
+  }
+  .back-link{
+    position:absolute;
+    top:20px;
+    left:20px;
+    color:whitesmoke;
+    text-decoration:none;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    transition: opacity 0.2s ease;
+  }
+  .back-link:hover{ opacity:0.7; }
+
+  .auth-box{
+    background:#fff;
+    width:420px;
+    max-width:90%;
+    padding:35px 30px;
+    border-radius:10px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.3);
+    opacity:0;
+    transform:translateY(20px);
+    animation: fadeUp 0.5s ease forwards;
+  }
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(20px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  .auth-box h2{
+    text-align:center;
+    color: rgb(18,18,65);
+    margin-bottom:6px;
+  }
+  .auth-box p.subtitle{
+    text-align:center;
+    color:#777;
+    font-size:14px;
+    margin-bottom:20px;
+  }
+
+  .property-summary{
+    background:#f4f6fb;
+    border-radius:8px;
+    padding:14px 16px;
+    margin-bottom:22px;
+  }
+  .property-summary h3{ color: rgb(18,18,65); font-size:16px; margin-bottom:4px; }
+  .property-summary p{ font-size:13px; color:#666; }
+  .property-summary .price{ font-weight:bold; color:#222; margin-top:2px; }
+
+  .input-group{
+    position:relative;
+    margin-bottom:16px;
+  }
+  .input-group i{
+    position:absolute;
+    left:14px;
+    top:14px;
+    color:#999;
+    font-size:18px;
+  }
+  .input-group input, .input-group textarea{
+    width:100%;
+    padding:12px 12px 12px 42px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:14px;
+    outline:none;
+    font-family: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .input-group textarea{ resize: vertical; min-height:80px; }
+  .input-group input:focus, .input-group textarea:focus{
+    border-color: rgb(18,18,65);
+    box-shadow: 0 0 0 3px rgba(18,18,65,0.12);
+  }
+
+  .success-msg{
+    display:none;
+    text-align:center;
+    color: #1e8449;
+    background:#e3f7e9;
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:16px;
+    font-size:14px;
+  }
+  .notice-msg{
+    text-align:center;
+    color:#555;
+    background:#fff5e0;
+    padding:16px;
+    border-radius:8px;
+    font-size:14px;
+    line-height:1.6;
+  }
+  .notice-msg a{ color: rgb(18,18,65); font-weight:bold; }
+
+  button.submit-btn{
+    width:100%;
+    padding:12px;
+    background: rgb(18,18,65);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    font-size:15px;
+    cursor:pointer;
+    transition: background-color 0.25s ease, transform 0.15s ease;
+  }
+  button.submit-btn:hover{ background: rgb(30,30,100); transform: scale(1.02); }
+  button.submit-btn:active{ transform: scale(0.98); }
+</style>
+</head>
+<body>
+
+<a href="property.html" class="back-link"><i class='bx bx-arrow-back'></i> Back to Listings</a>
+
+<div class="auth-box">
+  <h2>Apply for This Property</h2>
+  <p class="subtitle">Fill out your details below to submit an application</p>
+
+  <div class="property-summary">
+    <h3 id="summaryTitle">Property</h3>
+    <p id="summaryLocation"><i class='bx bxs-map'></i> Location</p>
+    <p class="price" id="summaryPrice">$0</p>
+  </div>
+
+  <!-- Shown only if a landlord is logged in -->
+  <div class="notice-msg" id="landlordNotice" style="display:none;">
+    Landlord accounts can't submit rental applications. Please log in with a tenant account, or <a href="RealEstPrjt.html">return to the homepage</a>.
+  </div>
+
+  <!-- Shown only if nobody is logged in -->
+  <div class="notice-msg" id="loginNotice" style="display:none;">
+    Please <a href="Login.html">log in</a> or <a href="Signup.html">create a tenant account</a> to apply for this property.
+  </div>
+
+  <!-- Shown if this tenant already applied to this property -->
+  <div class="notice-msg" id="existingNotice" style="display:none;"></div>
+
+  <p class="success-msg" id="successMsg">✅ Application submitted! The landlord will review it soon.</p>
+
+  <form id="applicationForm">
+    <div class="input-group">
+      <i class='bx bx-user'></i>
+      <input type="text" id="applicantName" placeholder="Full Name" required>
+    </div>
+    <div class="input-group">
+      <i class='bx bx-envelope'></i>
+      <input type="email" id="applicantEmail" placeholder="Email Address" required>
+    </div>
+    <div class="input-group">
+      <i class='bx bx-phone'></i>
+      <input type="tel" id="applicantPhone" placeholder="Mobile Number" required>
+    </div>
+    <div class="input-group">
+      <i class='bx bx-calendar'></i>
+      <input type="date" id="moveInDate" required>
+    </div>
+    <div class="input-group">
+      <i class='bx bx-message-detail'></i>
+      <textarea id="applicantMessage" placeholder="Anything you'd like the landlord to know? (optional)"></textarea>
+    </div>
+
+    <button type="submit" class="submit-btn">Submit Application</button>
+  </form>
+</div>
+
+<script>
+// --- Read property details from the URL ---
+const params = new URLSearchParams(window.location.search);
+const propertyId = params.get('id') || 'unknown';
+const propertyTitle = params.get('title') || 'Property';
+const propertyPrice = params.get('price') || '0';
+const propertyLocation = params.get('location') || '';
+
+document.getElementById('summaryTitle').textContent = propertyTitle;
+document.getElementById('summaryLocation').innerHTML = `<i class='bx bxs-map'></i> ${propertyLocation}`;
+document.getElementById('summaryPrice').textContent = '$' + Number(propertyPrice).toLocaleString();
+
+// --- Auth check ---
+const currentUser = JSON.parse(localStorage.getItem('zeyriCurrentUser'));
+const form = document.getElementById('applicationForm');
+const rentedProperties = JSON.parse(localStorage.getItem('zeyriRentedProperties')) || [];
+
+if (!currentUser) {
+  document.getElementById('loginNotice').style.display = 'block';
+  form.style.display = 'none';
+} else if (currentUser.role === 'landlord') {
+  document.getElementById('landlordNotice').style.display = 'block';
+  form.style.display = 'none';
+} else if (rentedProperties.includes(propertyId)) {
+  const notice = document.getElementById('existingNotice');
+  notice.style.display = 'block';
+  notice.innerHTML = `This property is <strong>no longer available</strong> — it's already been rented. <a href="property.html">Browse other listings</a> instead.`;
+  form.style.display = 'none';
+} else {
+  // Check if this tenant already applied to this specific property
+  const applications = JSON.parse(localStorage.getItem('zeyriApplications')) || [];
+  const existing = applications.find(a =>
+    a.tenantEmail === currentUser.email && a.propertyId === propertyId
+  );
+
+  if (existing) {
+    const notice = document.getElementById('existingNotice');
+    notice.style.display = 'block';
+    form.style.display = 'none';
+
+    if (existing.status === 'Pending') {
+      notice.innerHTML = `You've already applied for this property. Your application is <strong>under review</strong>. Check <a href="myapplications.html">My Applications</a> for updates.`;
+    } else if (existing.status === 'Approved') {
+      notice.innerHTML = `Good news — your application for this property was <strong style="color:#1e8449;">approved</strong>! See <a href="myapplications.html">My Applications</a> for details.`;
+    } else if (existing.status === 'Rejected') {
+      notice.innerHTML = `Your previous application for this property was <strong style="color:#c0392b;">not approved</strong>. See <a href="myapplications.html">My Applications</a> for details.`;
+    }
+  } else {
+    // Pre-fill known tenant info
+    document.getElementById('applicantName').value = currentUser.fullName || '';
+    document.getElementById('applicantEmail').value = currentUser.email || '';
+    document.getElementById('applicantEmail').readOnly = true;
+    document.getElementById('applicantEmail').style.backgroundColor = '#f4f4f4';
+    document.getElementById('applicantEmail').style.cursor = 'not-allowed';
+  }
+}
+
+// --- Submit handler ---
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const application = {
+    id: Date.now(),
+    tenantName: document.getElementById('applicantName').value.trim(),
+    tenantEmail: currentUser.email.toLowerCase(),
+    tenantPhone: document.getElementById('applicantPhone').value.trim(),
+    moveInDate: document.getElementById('moveInDate').value,
+    message: document.getElementById('applicantMessage').value.trim(),
+    propertyId,
+    propertyTitle,
+    propertyPrice,
+    propertyLocation,
+    status: 'Pending'
+  };
+
+  let applications = JSON.parse(localStorage.getItem('zeyriApplications')) || [];
+  applications.push(application);
+  localStorage.setItem('zeyriApplications', JSON.stringify(applications));
+
+  form.style.display = 'none';
+  document.getElementById('successMsg').style.display = 'block';
+});
+</script>
+
+</body>
+</html>
