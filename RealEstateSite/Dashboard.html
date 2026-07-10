@@ -240,6 +240,32 @@
   }
   .status-tag.approved{ background:#e3f7e9; color:#1e8449; }
   .status-tag.rejected{ background:#fdeaea; color:#c0392b; }
+
+  /* ===== Mobile Responsiveness ===== */
+  @media (max-width: 900px){
+    .sidebar{
+      width: 70px;
+    }
+    .sidebar .logo{ display: none; }
+    .sidebar nav a span{ display: none; }
+    .sidebar nav a{ justify-content: center; padding: 14px 0; }
+    .main{ margin-left: 70px; padding: 20px; }
+    .summary-grid{ grid-template-columns: repeat(2, 1fr); }
+    .property-grid{ grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  }
+
+  @media (max-width: 480px){
+    .summary-grid{ grid-template-columns: 1fr; }
+    .property-grid{ grid-template-columns: 1fr; }
+    .main{ padding: 15px; }
+    .topbar{ flex-direction: column; align-items: flex-start; gap: 8px; }
+    table{ display: block; overflow-x: auto; white-space: nowrap; }
+    .application-card{ flex-direction: column; align-items: flex-start; gap: 12px; }
+    .application-card .actions{ width: 100%; }
+    .application-card .actions button{ flex: 1; }
+    .modal{ width: 100%; padding: 20px; }
+    .modal .field-row{ flex-direction: column; gap: 0; }
+  }
 </style>
 </head>
 <body>
@@ -251,7 +277,7 @@
     <a data-target="properties"><i class='bx bx-building'></i> My Properties</a>
     <a data-target="applications"><i class='bx bx-file'></i> Applications</a>
     <a data-target="tenants"><i class='bx bx-group'></i> Tenants</a>
-    <a href="RealEstPrjt.html"><i class='bx bx-home-alt'></i> Back to Site</a>
+    <a href="index.html"><i class='bx bx-home-alt'></i> Back to Site</a>
     <div class="logout-link">
       <a id="logoutBtn"><i class='bx bx-log-out'></i> Log Out</a>
     </div>
@@ -359,7 +385,7 @@ document.getElementById('welcomeMsg').textContent = currentUser ? `Welcome back,
 
 document.getElementById('logoutBtn').addEventListener('click', function(){
   localStorage.removeItem('zeyriCurrentUser');
-  window.location.href = 'RealEstPrjt.html';
+  window.location.href = 'index.html';
 });
 
 // --- Section navigation ---

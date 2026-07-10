@@ -26,4 +26,32 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
+
+  // Mobile hamburger menu toggle
+  const navToggle = document.getElementById('navToggle');
+  const navMenu = document.getElementById('navMenu');
+  if (navToggle && navMenu) {
+    navToggle.addEventListener('click', function () {
+      navMenu.classList.toggle('show');
+    });
+  }
+
+  // On mobile, tap to open the Contact Us dropdown instead of relying on hover
+  document.querySelectorAll('li.dropdown > .dropdown-toggle').forEach(toggle => {
+    toggle.addEventListener('click', function (e) {
+      if (window.innerWidth <= 768) {
+        e.preventDefault();
+        this.parentElement.classList.toggle('open');
+      }
+    });
+  });
+
+  // Close the mobile menu after tapping a normal nav link (not the dropdown toggle)
+  document.querySelectorAll('#navMenu > li > a:not(.dropdown-toggle)').forEach(link => {
+    link.addEventListener('click', function () {
+      if (window.innerWidth <= 768 && navMenu) {
+        navMenu.classList.remove('show');
+      }
+    });
+  });
 });

@@ -144,13 +144,26 @@
     margin:60px auto 0;
   }
   .notice-msg a{ color: rgb(18,18,65); font-weight:bold; }
+
+  /* ===== Mobile Responsiveness ===== */
+  @media (max-width: 480px){
+    .topbar{ padding: 15px 20px; }
+    .main{ padding: 20px 15px; }
+    .rent-card .top-row{
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .modal{ width: 100%; padding: 20px; }
+    .modal .field-row{ flex-direction: column; gap: 0; }
+  }
 </style>
 </head>
 <body>
 
 <div class="topbar">
   <div><strong>ZeyRi Homes</strong></div>
-  <a href="RealEstPrjt.html"><i class='bx bx-home-alt'></i> Back to Home</a>
+  <a href="index.html"><i class='bx bx-home-alt'></i> Back to Home</a>
 </div>
 
 <div class="main">

@@ -12,7 +12,7 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    /* background: hsl(220, 60%, 20%); */
+    background: hsl(220, 60%, 20%);
   }
   .back-link{
     position:absolute;
@@ -153,11 +153,18 @@
     text-decoration:none;
   }
   .switch-link a:hover{ text-decoration:underline; }
+
+  /* ===== Mobile Responsiveness ===== */
+  @media (max-width: 420px){
+    .auth-box{ padding: 25px 20px; }
+    .back-link{ top: 12px; left: 12px; font-size: 12px; }
+    .options-row{ flex-wrap: wrap; gap: 8px; }
+  }
 </style>
 </head>
 <body>
 
-<a href="RealEstPrjt.html" class="back-link"><i class='bx bx-arrow-back'></i> Back to Home</a>
+<a href="index.html" class="back-link"><i class='bx bx-arrow-back'></i> Back to Home</a>
 
 <div class="auth-box">
   <h2>Welcome Back</h2>
@@ -236,7 +243,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e){
     if (match.role === 'landlord') {
       window.location.href = 'dashboard.html';
     } else {
-      window.location.href = 'RealEstPrjt.html';
+      window.location.href = 'index.html';
     }
   }, 900);
 });

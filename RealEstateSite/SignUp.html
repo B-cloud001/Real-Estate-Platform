@@ -182,11 +182,18 @@
     text-decoration:none;
   }
   .switch-link a:hover{ text-decoration:underline; }
+
+  /* ===== Mobile Responsiveness ===== */
+  @media (max-width: 420px){
+    .auth-box{ padding: 25px 20px; }
+    .back-link{ top: 12px; left: 12px; font-size: 12px; }
+    .role-select{ flex-direction: column; gap: 10px; }
+  }
 </style>
 </head>
 <body>
 
-<a href="RealEstPrjt.html" class="back-link"><i class='bx bx-arrow-back'></i> Back to Home</a>
+<a href="index.html" class="back-link"><i class='bx bx-arrow-back'></i> Back to Home</a>
 
 <div class="auth-box">
   <h2>Create Account</h2>

@@ -127,6 +127,12 @@
   }
   button.submit-btn:hover{ background: rgb(30,30,100); transform: scale(1.02); }
   button.submit-btn:active{ transform: scale(0.98); }
+
+  /* ===== Mobile Responsiveness ===== */
+  @media (max-width: 480px){
+    .auth-box{ padding: 25px 20px; }
+    .back-link{ top: 12px; left: 12px; font-size: 12px; }
+  }
 </style>
 </head>
 <body>
@@ -145,7 +151,7 @@
 
   <!-- Shown only if a landlord is logged in -->
   <div class="notice-msg" id="landlordNotice" style="display:none;">
-    Landlord accounts can't submit rental applications. Please log in with a tenant account, or <a href="RealEstPrjt.html">return to the homepage</a>.
+    Landlord accounts can't submit rental applications. Please log in with a tenant account, or <a href="index.html">return to the homepage</a>.
   </div>
 
   <!-- Shown only if nobody is logged in -->

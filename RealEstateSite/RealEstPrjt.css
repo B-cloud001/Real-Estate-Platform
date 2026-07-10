@@ -44,8 +44,8 @@ li a{
     transition: background-color 0.25s ease, transform 0.2s ease;
 }
 li a:hover{
-    color: rgb(18, 18, 65);
-    background-color: white;
+    background-color: rgb(18, 18, 65);
+    color: white;
     border-radius: 2px;
     padding: 8px 2px;
     transform: translateY(-2px);
@@ -59,6 +59,7 @@ li a:hover{
     width: 400px;
     height: 5px;
     transition: box-shadow 0.25s ease;
+    /* margin: auto; */
 }
 .search-bar input:focus{
     outline: none;
@@ -100,6 +101,7 @@ h2{
     text-align: center;
     margin-bottom: 10px;
     color: rgb(18, 18, 65);
+    
 }
 .feature-div{
     display: flex;
@@ -107,6 +109,7 @@ h2{
     gap: 50px;
     margin-left: 150px;
     margin-bottom: 50px;
+    /* justify-content: space-around;     */
 }
 .feature-div > div{
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -229,34 +232,12 @@ margin-top: 20px;
     height: 200px;
     width: 300px;
     border-radius: 5px;
-    transition: transform 0.9s ease ;
-}
-.img10{
-    background-image: url(images/image8.png);
-    background-size: cover;
-    height: 200px;
-    width: 300px;
-    border-radius: 5px;
     transition: transform 0.4s ease;
 }
-.img11{
-    background-image: url(images/image9.png);
-    background-size: cover;
-    height: 200px;
-    width: 300px;
-    border-radius: 5px;
-    transition: transform 0.4s ease;
-}
-.img12{
-    background-image: url(images/image10.png);
-    background-size: cover;
-    height: 200px;
-    width: 300px;
-    border-radius: 5px;
-    transition: transform 0.9s ease ;
-}
+
 .forsale-A{
 background-color: rgb(16, 16, 63);
+/* color: white; */
 height: 30px;
 width: 70px;
 margin-left: 10px;
@@ -286,6 +267,7 @@ top: 10px;
 margin-bottom: 2px;
 }
 .Listing-btn{
+    /* color: white; */
     color: rgb(16, 16, 63);
     display: block;
     width: fit-content;
@@ -447,3 +429,177 @@ li.dropdown:hover .dropdown-menu{
     color: rgb(18,18,65);
 }
 .dropdown-menu li a i{ font-size: 18px; }
+
+/* ===== Mobile Responsiveness ===== */
+@media (max-width: 768px){
+    nav{
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 10px 0;
+    }
+    .logo{
+        margin-right: 0;
+        margin-top: 10px;
+        text-align: center;
+    }
+    ul{
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+        padding: 0 10px;
+    }
+    li.dropdown{
+        margin-left: 0;
+    }
+    .search-bar{
+        flex-direction: column;
+        width: 100%;
+        padding: 0 20px;
+    }
+    .search-bar input{
+        width: 100%;
+        height: auto;
+        padding: 12px;
+    }
+    .search-bar button{
+        width: 100%;
+        height: auto;
+        padding: 12px;
+        margin-left: 0;
+        margin-top: 8px;
+    }
+    .hero-section{
+        height: auto;
+        padding-bottom: 40px;
+    }
+    .hero-text{
+        margin-left: 20px;
+        margin-right: 20px;
+        padding-top: 40px;
+        font-size: 20px;
+    }
+    .feature-div, .landlord-grid{
+        margin-left: 0;
+        padding: 0 20px;
+        justify-content: center;
+    }
+    .feature-div > div, .landlord-card{
+        width: 100%;
+        max-width: 340px;
+    }
+    .first-img, .img2, .img3, .img4, .img5, .img6, .img7, .img8, .img9{
+        width: 100%;
+    }
+    .site-footer{
+        padding: 30px 20px 15px;
+    }
+    .footer-top{
+        gap: 30px;
+    }
+    .footer-brand{
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px){
+    .Heading{
+        font-size: 22px;
+    }
+    .hero-text{
+        font-size: 18px;
+        padding-top: 30px;
+    }
+    ul{
+        gap: 6px;
+    }
+    li a{
+        font-size: 13px;
+    }
+}
+
+/* ===== Hamburger Menu ===== */
+.nav-toggle{
+    display: none;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    line-height: 1;
+}
+.nav-top{
+    display: contents;
+}
+
+@media (max-width: 768px){
+    nav{
+        flex-direction: column;
+        align-items: stretch;
+        padding: 15px 20px;
+    }
+    .nav-top{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+    .nav-toggle{
+        display: block;
+    }
+    .logo{
+        margin: 0;
+        text-align: left;
+    }
+    ul{
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 15px;
+        gap: 0;
+        padding: 0;
+    }
+    ul.show{
+        display: flex;
+    }
+    li{
+        width: 100%;
+    }
+    li a{
+        display: flex;
+        padding: 12px 0;
+        width: 100%;
+        justify-content: center;
+    }
+    li.dropdown{
+        margin-left: 0;
+        width: 100%;
+    }
+    .dropdown-menu{
+        display: none;
+        position: static;
+        box-shadow: none;
+        width: 100%;
+        opacity: 1;
+        transform: none;
+        background: rgba(255,255,255,0.06);
+    }
+    li.dropdown:hover .dropdown-menu{
+        display: none;
+    }
+    li.dropdown.open .dropdown-menu{
+        display: block;
+    }
+    .dropdown-menu li a{
+        color: white;
+        justify-content: center;
+    }
+    .dropdown-menu li a:hover{
+        background: rgba(255,255,255,0.12);
+        color: white;
+    }
+    li.dropdown:hover .dropdown-arrow{
+        transform: none;
+    }
+    li.dropdown.open .dropdown-arrow{
+        transform: rotate(180deg);
+    }
+}

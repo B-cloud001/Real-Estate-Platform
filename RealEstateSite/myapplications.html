@@ -142,13 +142,26 @@
   .success-screen i{ font-size:50px; color:#1e8449; margin-bottom:12px; display:block; }
   .success-screen h2{ color: rgb(18,18,65); margin-bottom:8px; font-size:19px; }
   .success-screen p{ color:#666; font-size:14px; margin-bottom:20px; }
+
+  /* ===== Mobile Responsiveness ===== */
+  @media (max-width: 480px){
+    .topbar{ padding: 15px 20px; }
+    .main{ padding: 20px 15px; }
+    .application-card{
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .modal{ width: 100%; padding: 20px; }
+    .modal .field-row{ flex-direction: column; gap: 0; }
+  }
 </style>
 </head>
 <body>
 
 <div class="topbar">
   <div><strong>ZeyRi Homes</strong></div>
-  <a href="RealEstPrjt.html"><i class='bx bx-home-alt'></i> Back to Home</a>
+  <a href="index.html"><i class='bx bx-home-alt'></i> Back to Home</a>
 </div>
 
 <div class="main">
