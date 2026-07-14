@@ -82,6 +82,59 @@
         color: rgb(18,18,65);
         margin-bottom: 8px;
       }
+
+      /* Image gallery */
+      .gallery{
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+        background: linear-gradient(135deg, rgb(18,18,65), rgb(50,50,120));
+      }
+      .gallery-track{
+        display: flex;
+        height: 100%;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+      }
+      .gallery-track::-webkit-scrollbar{ display: none; }
+      .gallery-slide{
+        flex: 0 0 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        scroll-snap-align: start;
+      }
+      .gallery-prev, .gallery-next{
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0,0,0,0.45);
+        color: #fff;
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s ease;
+      }
+      .gallery-prev:hover, .gallery-next:hover{ background: rgba(0,0,0,0.7); }
+      .gallery-prev{ left: 8px; }
+      .gallery-next{ right: 8px; }
+      .gallery-counter{
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+        background: rgba(0,0,0,0.55);
+        color: #fff;
+        font-size: 11px;
+        padding: 3px 9px;
+        border-radius: 10px;
+      }
     </style>
 </head>
 <body>
@@ -144,7 +197,7 @@
     <div id="landlordListingsWrap"></div>
     <div class="feature-div">
 
-      <div>
+      <div data-beds="3" data-title="Sunset Ridge Cottage" data-location="14 sunset ridge, austin, tx">
           <div class="first-img">
             <p class="forsale-A">For Rent</p>
           </div>
@@ -163,7 +216,7 @@
              <a class="apply-btn" href="application.html?id=1&title=Sunset%20Ridge%20Cottage&price=2200&location=14%20Sunset%20Ridge%2C%20Austin%2C%20TX">Apply Now</a>
       </div>
       
-      <div>
+      <div data-beds="2" data-title="Urban Loft Retreat" data-location="88 congress ave, austin, tx">
         <div class="img2">
           <p class="forsale-B">For Rent</p></div>
           <h3>Urban Loft Retreat</h3>
@@ -180,7 +233,7 @@
              </div>
           <a class="apply-btn" href="application.html?id=2&title=Urban%20Loft%20Retreat&price=1800&location=88%20Congress%20Ave%2C%20Austin%2C%20TX">Apply Now</a>
       </div>
-      <div>
+      <div data-beds="3" data-title="Maple Grove Bungalow" data-location="321 maple street, austin, tx">
         <div class="img3">
           <p class="forsale-C">For Rent</p></div>
           <div>
@@ -203,7 +256,7 @@
 
     <div class="feature-div">
 
-      <div>
+      <div data-beds="4" data-title="Lakeside Family Home" data-location="77 lakeview dr, austin, tx">
           <div class="img4">
             <p class="forsale-A">For Rent</p>
           </div>
@@ -221,7 +274,7 @@
              </div>
              <a class="apply-btn" href="application.html?id=4&title=Lakeside%20Family%20Home&price=2600&location=77%20Lakeview%20Dr%2C%20Austin%2C%20TX">Apply Now</a>
       </div>
-      <div>
+      <div data-beds="1" data-title="Downtown City Loft" data-location="500 6th street, austin, tx">
         <div class="img5">
           <p class="forsale-B">For Rent</p></div>
           <h3>Downtown City Loft</h3>
@@ -238,7 +291,7 @@
              </div>
           <a class="apply-btn" href="application.html?id=5&title=Downtown%20City%20Loft&price=1700&location=500%206th%20Street%2C%20Austin%2C%20TX">Apply Now</a>
       </div>
-      <div>
+      <div data-beds="3" data-title="Willow Creek House" data-location="9 willow creek ln, austin, tx">
         <div class="img6">
           <p class="forsale-C">For Rent</p></div>
           <div>
@@ -261,7 +314,7 @@
 
     <div class="feature-div">
 
-      <div>
+      <div data-beds="4" data-title="Hilltop Modern Villa" data-location="44 hilltop rd, austin, tx">
           <div class="img7">
             <p class="forsale-A">For Rent</p>
           </div>
@@ -279,7 +332,7 @@
              </div>
              <a class="apply-btn" href="application.html?id=7&title=Hilltop%20Modern%20Villa&price=3200&location=44%20Hilltop%20Rd%2C%20Austin%2C%20TX">Apply Now</a>
       </div>
-      <div>
+      <div data-beds="3" data-title="Riverside Garden Home" data-location="12 riverside ave, austin, tx">
         <div class="img8">
           <p class="forsale-B">For Rent</p></div>
           <h3>Riverside Garden Home</h3>
@@ -296,7 +349,7 @@
              </div>
           <a class="apply-btn" href="application.html?id=8&title=Riverside%20Garden%20Home&price=2400&location=12%20Riverside%20Ave%2C%20Austin%2C%20TX">Apply Now</a>
       </div>
-      <div>
+      <div data-beds="3" data-title="Oakwood Family Residence" data-location="68 oakwood blvd, austin, tx">
         <div class="img9">
           <p class="forsale-C">For Rent</p></div>
           <div>
@@ -362,9 +415,23 @@ document.addEventListener('DOMContentLoaded', function(){
       wrap.innerHTML = `
         <p class="landlord-section-label">Recently Listed</p>
         <div class="landlord-grid">
-          ${availableOnes.map(p => `
-            <div class="landlord-card">
-              <div class="thumb"><i class='bx bx-building-house'></i></div>
+          ${availableOnes.map(p => {
+            const images = (p.images && p.images.length > 0) ? p.images : (p.imageData ? [p.imageData] : []);
+            const galleryHTML = images.length > 0 ? `
+              <div class="gallery">
+                <div class="gallery-track">
+                  ${images.map(img => `<div class="gallery-slide" style="background-image:url('${img}');"></div>`).join('')}
+                </div>
+                ${images.length > 1 ? `
+                  <button class="gallery-prev" onclick="scrollGallery(this, -1)"><i class='bx bx-chevron-left'></i></button>
+                  <button class="gallery-next" onclick="scrollGallery(this, 1)"><i class='bx bx-chevron-right'></i></button>
+                  <div class="gallery-counter">1/${images.length}</div>
+                ` : ''}
+              </div>` : `<div class="thumb"><i class='bx bx-building-house'></i></div>`;
+
+            return `
+            <div class="landlord-card" data-beds="${p.beds}" data-title="${p.title.toLowerCase()}" data-location="${p.location.toLowerCase()}">
+              ${galleryHTML}
               <div class="body">
                 <span class="status-tag">${p.status}</span>
                 <h3>${p.title}</h3>
@@ -372,10 +439,30 @@ document.addEventListener('DOMContentLoaded', function(){
                 <div class="meta"><i class='bx bxs-map'></i> ${p.location} &middot; ${p.beds} bd &middot; ${p.baths} ba &middot; ${p.sqft} sqft</div>
                 <a class="apply-btn" href="application.html?id=${p.id}&title=${encodeURIComponent(p.title)}&price=${p.price}&location=${encodeURIComponent(p.location)}">Apply Now</a>
               </div>
-            </div>`).join('')}
+            </div>`;
+          }).join('')}
         </div>`;
     }
   }
+
+  // Gallery navigation: scroll one slide at a time, and keep the counter in sync
+  window.scrollGallery = function(btn, direction){
+    const gallery = btn.closest('.gallery');
+    const track = gallery.querySelector('.gallery-track');
+    const slideWidth = track.clientWidth;
+    track.scrollBy({ left: direction * slideWidth, behavior: 'smooth' });
+  };
+
+  document.querySelectorAll('.gallery-track').forEach(track => {
+    const gallery = track.closest('.gallery');
+    const counter = gallery.querySelector('.gallery-counter');
+    const total = gallery.querySelectorAll('.gallery-slide').length;
+    if (!counter) return;
+    track.addEventListener('scroll', () => {
+      const index = Math.round(track.scrollLeft / track.clientWidth) + 1;
+      counter.textContent = `${Math.min(index, total)}/${total}`;
+    });
+  });
 
   // Disable Apply buttons for already-rented properties (covers both static and dynamic cards)
   document.querySelectorAll('.apply-btn').forEach(btn => {
@@ -388,6 +475,26 @@ document.addEventListener('DOMContentLoaded', function(){
       btn.replaceWith(label);
     }
   });
+
+  // Apply search term passed from the homepage, if any
+  const urlParams = new URLSearchParams(window.location.search);
+  const searchTerm = urlParams.get('search');
+  if (searchTerm) {
+    window.filterListings(searchTerm);
+    const matchCount = document.querySelectorAll('.feature-div > div, .landlord-card').length -
+      document.querySelectorAll('.feature-div > div[style*="display: none"], .landlord-card[style*="display: none"]').length;
+    const heading = document.querySelector('.Heading');
+    if (heading) {
+      const notice = document.createElement('p');
+      notice.style.textAlign = 'center';
+      notice.style.color = '#666';
+      notice.style.fontSize = '14px';
+      notice.style.marginTop = '-15px';
+      notice.style.marginBottom = '25px';
+      notice.innerHTML = `${matchCount} propert${matchCount === 1 ? 'y' : 'ies'} found for "<strong>${searchTerm}</strong>" &middot; <a href="property.html" style="color:rgb(18,18,65); font-weight:bold;">Clear search</a>`;
+      heading.insertAdjacentElement('afterend', notice);
+    }
+  }
 });
 </script>
 </html>

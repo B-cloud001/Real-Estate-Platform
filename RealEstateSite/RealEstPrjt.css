@@ -44,8 +44,8 @@ li a{
     transition: background-color 0.25s ease, transform 0.2s ease;
 }
 li a:hover{
-    background-color: rgb(18, 18, 65);
-    color: white;
+    background-color: white;
+    color: rgb(18, 18, 65);
     border-radius: 2px;
     padding: 8px 2px;
     transform: translateY(-2px);
@@ -59,7 +59,6 @@ li a:hover{
     width: 400px;
     height: 5px;
     transition: box-shadow 0.25s ease;
-    /* margin: auto; */
 }
 .search-bar input:focus{
     outline: none;
@@ -87,21 +86,32 @@ li a:hover{
    height: 500px;
    margin-bottom: 10px;
    background-repeat: no-repeat;
+   display: flex;
+   align-items: center;
 }
 .hero-text{
     margin-left: 80px;
-    padding-top: 100px;
+    padding: 25px 30px;
     font-size: 25px;
     color: rgb(18, 18, 65);
     opacity: 0;
     transform: translateY(20px);
     animation: fadeUp 0.8s ease forwards;
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(3px);
+    border-radius: 14px;
+    display: inline-block;
+    max-width: 600px;
+}
+.hero-text h1{
+    font-size: 40px;
+    line-height: 1.25;
+    margin-bottom: 25px;
 }
 h2{
     text-align: center;
     margin-bottom: 10px;
     color: rgb(18, 18, 65);
-    
 }
 .feature-div{
     display: flex;
@@ -109,13 +119,13 @@ h2{
     gap: 50px;
     margin-left: 150px;
     margin-bottom: 50px;
-    /* justify-content: space-around;     */
 }
 .feature-div > div{
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border-radius: 8px;
     opacity: 0;
     transform: translateY(30px);
+    padding: 0 15px 15px;
 }
 .feature-div > div.in-view{
     animation: fadeUp 0.6s ease forwards;
@@ -150,8 +160,19 @@ h2{
     border-radius: 5px;  
     transition: transform 0.4s ease;
 }
-.icon-A{
-margin-top: 20px;
+.icon-A, .icon-B, .icon-C{
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: #666;
+    font-size: 13px;
+}
+.icon-A i, .icon-B i, .icon-C i{
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-style: normal;
 }
 .img2{
     background-image: url(images/image14.png);
@@ -237,13 +258,13 @@ margin-top: 20px;
 
 .forsale-A{
 background-color: rgb(16, 16, 63);
-/* color: white; */
 height: 30px;
 width: 70px;
 margin-left: 10px;
 padding-top: 10px;
 position: relative;
 top: 10px;
+border-radius: 6px;
 }
 .forsale-B{
 background-color: rgb(16, 16, 63);
@@ -254,6 +275,7 @@ margin-left: 10px;
 padding-top: 10px;
 position: relative;
 top: 10px;
+border-radius: 6px;
 }
 .forsale-C{
 background-color: rgb(16, 16, 63);
@@ -265,9 +287,9 @@ padding-top: 15px;
 position: relative;
 top: 10px;
 margin-bottom: 2px;
+border-radius: 6px;
 }
 .Listing-btn{
-    /* color: white; */
     color: rgb(16, 16, 63);
     display: block;
     width: fit-content;
@@ -455,38 +477,65 @@ li.dropdown:hover .dropdown-menu{
     .search-bar{
         flex-direction: column;
         width: 100%;
-        padding: 0 20px;
+        max-width: 320px;
+        margin: 18px auto 0;
+        padding: 0;
+        background: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.2);
     }
     .search-bar input{
         width: 100%;
         height: auto;
-        padding: 12px;
+        padding: 12px 14px;
+        font-size: 14px;
+        border: none;
+        box-shadow: none;
+    }
+    .search-bar input:focus{
+        box-shadow: none;
     }
     .search-bar button{
         width: 100%;
         height: auto;
         padding: 12px;
         margin-left: 0;
-        margin-top: 8px;
+        margin-top: 0;
+        border-radius: 0;
     }
     .hero-section{
         height: auto;
-        padding-bottom: 40px;
+        min-height: 420px;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        padding: 30px 0 40px;
     }
     .hero-text{
         margin-left: 20px;
         margin-right: 20px;
-        padding-top: 40px;
+        padding: 20px;
         font-size: 20px;
+        width: calc(100% - 40px);
+        max-width: 100%;
+        display: block;
+        box-sizing: border-box;
+    }
+    .hero-text h1{
+        font-size: 24px;
+        line-height: 1.3;
+        margin-bottom: 15px;
     }
     .feature-div, .landlord-grid{
         margin-left: 0;
-        padding: 0 20px;
+        padding: 0 24px;
         justify-content: center;
     }
     .feature-div > div, .landlord-card{
         width: 100%;
         max-width: 340px;
+        margin-bottom: 10px;
     }
     .first-img, .img2, .img3, .img4, .img5, .img6, .img7, .img8, .img9{
         width: 100%;
@@ -532,8 +581,8 @@ li.dropdown:hover .dropdown-menu{
 
 @media (max-width: 768px){
     nav{
-        flex-direction: column;
-        align-items: stretch;
+        flex-direction: row;
+        align-items: center;
         padding: 15px 20px;
     }
     .nav-top{
@@ -552,10 +601,17 @@ li.dropdown:hover .dropdown-menu{
     ul{
         display: none;
         flex-direction: column;
-        width: 100%;
-        margin-top: 15px;
+        position: absolute;
+        top: 100%;
+        right: 15px;
+        width: 220px;
+        margin-top: 8px;
         gap: 0;
-        padding: 0;
+        padding: 8px 0;
+        background: hsl(220, 60%, 16%);
+        border-radius: 10px;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+        z-index: 1000;
     }
     ul.show{
         display: flex;
@@ -565,9 +621,9 @@ li.dropdown:hover .dropdown-menu{
     }
     li a{
         display: flex;
-        padding: 12px 0;
+        padding: 12px 16px;
         width: 100%;
-        justify-content: center;
+        justify-content: flex-start;
     }
     li.dropdown{
         margin-left: 0;
@@ -590,7 +646,8 @@ li.dropdown:hover .dropdown-menu{
     }
     .dropdown-menu li a{
         color: white;
-        justify-content: center;
+        justify-content: flex-start;
+        padding-left: 30px; 
     }
     .dropdown-menu li a:hover{
         background: rgba(255,255,255,0.12);

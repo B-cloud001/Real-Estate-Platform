@@ -127,6 +127,7 @@
     background: linear-gradient(135deg, rgb(18,18,65), rgb(50,50,120));
     display:flex; align-items:center; justify-content:center;
     color:#fff; font-size:30px;
+    position: relative;
   }
   .property-card .body{ padding:15px; }
   .property-card h3{ font-size:15px; color: rgb(18,18,65); margin-bottom:4px; }
@@ -177,6 +178,8 @@
     padding:30px;
     border-radius:12px;
     animation: popIn 0.25s ease;
+    max-height: 88vh;
+    overflow-y: auto;
   }
   @keyframes popIn{ from{opacity:0; transform:scale(0.9);} to{opacity:1; transform:scale(1);} }
   .modal h2{ color: rgb(18,18,65); margin-bottom:18px; }
@@ -202,6 +205,30 @@
   .rent-status.overdue{ background:#fdeaea; color:#c0392b; }
 
   @keyframes fadeUp{ from{opacity:0; transform:translateY(15px);} to{opacity:1; transform:translateY(0);} }
+
+  /* Toast notification */
+  .toast{
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgb(18,18,65);
+    color: #fff;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 2000;
+    max-width: 90%;
+    text-align: center;
+  }
+  .toast.show{
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 
   /* Application cards */
   .application-card{
@@ -242,14 +269,42 @@
   .status-tag.rejected{ background:#fdeaea; color:#c0392b; }
 
   /* ===== Mobile Responsiveness ===== */
+  .dash-toggle{
+    display: none;
+    cursor: pointer;
+    font-size: 26px;
+    color: rgb(18,18,65);
+    margin-right: 15px;
+  }
+  .topbar-left{
+    display: flex;
+    align-items: center;
+  }
+  .sidebar-backdrop{
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.45);
+    z-index: 1400;
+  }
+  .sidebar-backdrop.show{ display: block; }
+
   @media (max-width: 900px){
     .sidebar{
-      width: 70px;
+      width: 230px;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      z-index: 1500;
     }
-    .sidebar .logo{ display: none; }
-    .sidebar nav a span{ display: none; }
-    .sidebar nav a{ justify-content: center; padding: 14px 0; }
-    .main{ margin-left: 70px; padding: 20px; }
+    .sidebar.show{
+      transform: translateX(0);
+    }
+    .sidebar .logo{ display: block; }
+    .sidebar nav a span{ display: inline; }
+    .sidebar nav a{ justify-content: flex-start; padding: 12px 20px; }
+    .main{ margin-left: 0; padding: 20px; }
+    .dash-toggle{ display: block; }
     .summary-grid{ grid-template-columns: repeat(2, 1fr); }
     .property-grid{ grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
   }
@@ -258,7 +313,7 @@
     .summary-grid{ grid-template-columns: 1fr; }
     .property-grid{ grid-template-columns: 1fr; }
     .main{ padding: 15px; }
-    .topbar{ flex-direction: column; align-items: flex-start; gap: 8px; }
+    .topbar{ flex-direction: row; align-items: center; gap: 8px; }
     table{ display: block; overflow-x: auto; white-space: nowrap; }
     .application-card{ flex-direction: column; align-items: flex-start; gap: 12px; }
     .application-card .actions{ width: 100%; }
@@ -270,25 +325,30 @@
 </head>
 <body>
 
-<div class="sidebar">
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+<div class="sidebar" id="sidebar">
   <div class="logo">ZeyRi Homes<br><span style="font-size:12px; opacity:0.7;">Landlord Panel</span></div>
   <nav>
-    <a data-target="overview" class="active"><i class='bx bx-grid-alt'></i> Overview</a>
-    <a data-target="properties"><i class='bx bx-building'></i> My Properties</a>
-    <a data-target="applications"><i class='bx bx-file'></i> Applications</a>
-    <a data-target="tenants"><i class='bx bx-group'></i> Tenants</a>
-    <a href="index.html"><i class='bx bx-home-alt'></i> Back to Site</a>
+    <a data-target="overview" class="active"><i class='bx bx-grid-alt'></i> <span>Overview</span></a>
+    <a data-target="properties"><i class='bx bx-building'></i> <span>My Properties</span></a>
+    <a data-target="applications"><i class='bx bx-file'></i> <span>Applications</span></a>
+    <a data-target="tenants"><i class='bx bx-group'></i> <span>Tenants</span></a>
+    <a href="index.html"><i class='bx bx-home-alt'></i> <span>Back to Site</span></a>
     <div class="logout-link">
-      <a id="logoutBtn"><i class='bx bx-log-out'></i> Log Out</a>
+      <a id="logoutBtn"><i class='bx bx-log-out'></i> <span>Log Out</span></a>
     </div>
   </nav>
 </div>
 
 <div class="main">
   <div class="topbar">
-    <div>
-      <h1>Dashboard</h1>
-      <p class="welcome" id="welcomeMsg">Welcome back!</p>
+    <div class="topbar-left">
+      <div class="dash-toggle" id="dashToggle"><i class='bx bx-menu'></i></div>
+      <div>
+        <h1>Dashboard</h1>
+        <p class="welcome" id="welcomeMsg">Welcome back!</p>
+      </div>
     </div>
   </div>
 
@@ -367,15 +427,34 @@
           <input type="number" id="pSqft" required placeholder="2400">
         </div>
       </div>
+      <div class="field">
+        <label>Property Photos (1–20 photos — include interior and exterior shots)</label>
+        <input type="file" id="pImage" accept="image/*" multiple>
+        <div id="pImageCount" style="font-size:12px; margin-top:6px;"></div>
+        <div id="pImagePreviewGrid" style="display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;"></div>
+      </div>
       <div class="modal-actions">
         <button type="button" class="cancel-btn" id="cancelPropertyBtn">Cancel</button>
-        <button type="submit" class="save-btn">Save Property</button>
+        <button type="submit" class="save-btn">List Property</button>
       </div>
     </form>
   </div>
 </div>
 
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
 <script>
+// --- Toast helper ---
+function showToast(message){
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3200);
+}
+
 // --- Auth guard ---
 const currentUser = JSON.parse(localStorage.getItem('zeyriCurrentUser'));
 if (!currentUser) {
@@ -395,8 +474,25 @@ document.querySelectorAll('.sidebar nav a[data-target]').forEach(link => {
     this.classList.add('active');
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.getElementById(this.dataset.target).classList.add('active');
+    closeSidebar();
   });
 });
+
+// --- Mobile hamburger sidebar toggle ---
+const sidebar = document.getElementById('sidebar');
+const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+const dashToggle = document.getElementById('dashToggle');
+
+function openSidebar(){
+  sidebar.classList.add('show');
+  sidebarBackdrop.classList.add('show');
+}
+function closeSidebar(){
+  sidebar.classList.remove('show');
+  sidebarBackdrop.classList.remove('show');
+}
+dashToggle.addEventListener('click', openSidebar);
+sidebarBackdrop.addEventListener('click', closeSidebar);
 
 // --- Property data ---
 function getProperties(){
@@ -418,9 +514,15 @@ function renderProperties(){
     return;
   }
 
-  const cardHTML = (p, i) => `
+  const cardHTML = (p, i) => {
+    const coverImage = (p.images && p.images.length > 0) ? p.images[0] : p.imageData;
+    const photoCount = p.images ? p.images.length : (p.imageData ? 1 : 0);
+    return `
     <div class="property-card" style="animation-delay:${i * 0.05}s">
-      <div class="thumb"><i class='bx bx-building-house'></i></div>
+      <div class="thumb" ${coverImage ? `style="background-image:url('${coverImage}'); background-size:cover; background-position:center;"` : ''}>
+        ${!coverImage ? `<i class='bx bx-building-house'></i>` : ''}
+        ${photoCount > 1 ? `<span style="position:absolute; top:8px; right:8px; background:rgba(0,0,0,0.55); color:#fff; font-size:11px; padding:3px 8px; border-radius:10px;">${photoCount} photos</span>` : ''}
+      </div>
       <div class="body">
         <span class="status-badge">${p.status}</span>
         <h3>${p.title}</h3>
@@ -431,6 +533,7 @@ function renderProperties(){
         </div>
       </div>
     </div>`;
+  };
 
   grid.innerHTML = props.map(cardHTML).join('');
   overviewGrid.innerHTML = props.slice(-3).reverse().map(cardHTML).join('');
@@ -447,13 +550,104 @@ document.getElementById('addPropertyBtn').addEventListener('click', () => {
 });
 document.getElementById('cancelPropertyBtn').addEventListener('click', () => {
   document.getElementById('propertyOverlay').classList.remove('active');
+  document.getElementById('propertyForm').reset();
+  selectedPropertyImages = [];
+  document.getElementById('pImagePreviewGrid').innerHTML = '';
+  document.getElementById('pImageCount').textContent = '';
 });
 document.getElementById('propertyOverlay').addEventListener('click', function(e){
   if (e.target === this) this.classList.remove('active');
 });
 
-document.getElementById('propertyForm').addEventListener('submit', function(e){
+// Compress an uploaded image before storing it, so it doesn't blow past localStorage's limit.
+// Resizes to a max width and re-encodes as JPEG at reduced quality. Returns a Promise.
+function compressImageAsync(file, maxWidth, quality){
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = function(e){
+      const img = new Image();
+      img.onload = function(){
+        let width = img.width;
+        let height = img.height;
+        if (width > maxWidth) {
+          height = Math.round(height * (maxWidth / width));
+          width = maxWidth;
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+const MIN_PROPERTY_IMAGES = 1;
+const MAX_PROPERTY_IMAGES = 20;
+let selectedPropertyImages = []; // accumulates across multiple "Choose Files" picks
+
+function renderImageCountLabel(){
+  const countLabel = document.getElementById('pImageCount');
+  const count = selectedPropertyImages.length;
+  if (count === 0) {
+    countLabel.textContent = '';
+  } else if (count > MAX_PROPERTY_IMAGES) {
+    countLabel.textContent = `${count} selected — max is ${MAX_PROPERTY_IMAGES}. Remove some below.`;
+    countLabel.style.color = '#c0392b';
+  } else {
+    countLabel.textContent = `${count} photo${count === 1 ? '' : 's'} selected ✓`;
+    countLabel.style.color = '#1e8449';
+  }
+}
+
+function renderImagePreviewGrid(){
+  const grid = document.getElementById('pImagePreviewGrid');
+  grid.innerHTML = selectedPropertyImages.map((src, i) => `
+    <div style="position:relative;">
+      <img src="${src}" style="width:60px; height:60px; object-fit:cover; border-radius:6px; display:block;">
+      <span onclick="removePropertyImage(${i})" style="position:absolute; top:-6px; right:-6px; background:#c0392b; color:#fff; width:18px; height:18px; border-radius:50%; font-size:12px; line-height:18px; text-align:center; cursor:pointer;">&times;</span>
+    </div>
+  `).join('');
+}
+
+function removePropertyImage(index){
+  selectedPropertyImages.splice(index, 1);
+  renderImageCountLabel();
+  renderImagePreviewGrid();
+}
+
+// Each time photos are chosen, ADD them to the running list instead of replacing it
+document.getElementById('pImage').addEventListener('change', async function(){
+  const newFiles = Array.from(this.files);
+  if (newFiles.length === 0) return;
+
+  const room = MAX_PROPERTY_IMAGES - selectedPropertyImages.length;
+  const filesToAdd = newFiles.slice(0, Math.max(room, 0));
+
+  const newCompressed = await Promise.all(filesToAdd.map(f => compressImageAsync(f, 500, 0.6)));
+  selectedPropertyImages.push(...newCompressed);
+
+  if (newFiles.length > filesToAdd.length) {
+    showToast(`⚠️ Only added ${filesToAdd.length} — you're capped at ${MAX_PROPERTY_IMAGES} total photos.`);
+  }
+
+  this.value = ''; // reset so choosing the same file(s) again still triggers change
+  renderImageCountLabel();
+  renderImagePreviewGrid();
+});
+
+document.getElementById('propertyForm').addEventListener('submit', async function(e){
   e.preventDefault();
+
+  if (selectedPropertyImages.length < MIN_PROPERTY_IMAGES) {
+    showToast(`⚠️ Please upload at least ${MIN_PROPERTY_IMAGES} photo before listing.`);
+    return;
+  }
+
+  // Re-compress at higher quality for actual storage (previews above are smaller/lower quality for speed)
   const props = getProperties();
   props.push({
     id: Date.now(),
@@ -463,12 +657,32 @@ document.getElementById('propertyForm').addEventListener('submit', function(e){
     location: document.getElementById('pLocation').value.trim(),
     beds: document.getElementById('pBeds').value,
     baths: document.getElementById('pBaths').value,
-    sqft: document.getElementById('pSqft').value
+    sqft: document.getElementById('pSqft').value,
+    images: selectedPropertyImages,
+    imageData: selectedPropertyImages[0] || null
   });
-  saveProperties(props);
+
+  try {
+    saveProperties(props);
+  } catch (err) {
+    showToast('⚠️ Storage limit reached. Try fewer/smaller photos, or delete an old property first.');
+    return; // keep the modal open so they can retry instead of losing their input
+  }
+
   renderProperties();
-  this.reset();
+  document.getElementById('propertyForm').reset();
+  selectedPropertyImages = [];
+  document.getElementById('pImagePreviewGrid').innerHTML = '';
+  document.getElementById('pImageCount').textContent = '';
   document.getElementById('propertyOverlay').classList.remove('active');
+
+  // Switch to My Properties tab so the landlord sees it appear right away
+  document.querySelectorAll('.sidebar nav a[data-target]').forEach(l => l.classList.remove('active'));
+  document.querySelector('.sidebar nav a[data-target="properties"]').classList.add('active');
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('properties').classList.add('active');
+
+  showToast('🎉 Property listed successfully! It\'s now live on your public listings page.');
 });
 
 // --- Tenant data (populated when applications get approved) ---
