@@ -59,6 +59,7 @@ li a:hover{
     width: 400px;
     height: 5px;
     transition: box-shadow 0.25s ease;
+    /* margin: auto; */
 }
 .search-bar input:focus{
     outline: none;
@@ -112,6 +113,7 @@ h2{
     text-align: center;
     margin-bottom: 10px;
     color: rgb(18, 18, 65);
+    
 }
 .feature-div{
     display: flex;
@@ -119,6 +121,7 @@ h2{
     gap: 50px;
     margin-left: 150px;
     margin-bottom: 50px;
+    /* justify-content: space-around;     */
 }
 .feature-div > div{
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -258,38 +261,43 @@ margin-top: 20px;
 
 .forsale-A{
 background-color: rgb(16, 16, 63);
-height: 30px;
-width: 70px;
+color: white;
+display: inline-block;
+padding: 6px 14px;
 margin-left: 10px;
-padding-top: 10px;
 position: relative;
 top: 10px;
 border-radius: 6px;
+font-size: 13px;
+line-height: normal;
 }
 .forsale-B{
 background-color: rgb(16, 16, 63);
 color: white;
-height: 30px;
-width: 70px;
+display: inline-block;
+padding: 6px 14px;
 margin-left: 10px;
-padding-top: 10px;
 position: relative;
 top: 10px;
 border-radius: 6px;
+font-size: 13px;
+line-height: normal;
 }
 .forsale-C{
 background-color: rgb(16, 16, 63);
 color: white;
-height: 25px;
-width: 70px;
+display: inline-block;
+padding: 6px 14px;
 margin-left: 10px;
-padding-top: 15px;
 position: relative;
 top: 10px;
 margin-bottom: 2px;
 border-radius: 6px;
+font-size: 13px;
+line-height: normal;
 }
 .Listing-btn{
+    /* color: white; */
     color: rgb(16, 16, 63);
     display: block;
     width: fit-content;
@@ -647,7 +655,7 @@ li.dropdown:hover .dropdown-menu{
     .dropdown-menu li a{
         color: white;
         justify-content: flex-start;
-        padding-left: 30px; 
+        padding-left: 30px;
     }
     .dropdown-menu li a:hover{
         background: rgba(255,255,255,0.12);
@@ -659,4 +667,56 @@ li.dropdown:hover .dropdown-menu{
     li.dropdown.open .dropdown-arrow{
         transform: rotate(180deg);
     }
+}
+
+/* ===== Dark Mode ===== */
+body{
+    background-color: #ffffff;
+    color: #222222;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+body.dark-mode{
+    background-color: #14162b;
+    color: #dfe3f0;
+}
+body.dark-mode .Heading,
+body.dark-mode h2{
+    color: #9fb0e0;
+}
+body.dark-mode .hero-text{
+    background: rgba(20,22,43,0.65);
+    color: #fff;
+}
+body.dark-mode .hero-text h1{
+    color: #fff;
+}
+body.dark-mode .feature-div > div,
+body.dark-mode .landlord-card{
+    background: #1f2140;
+}
+body.dark-mode .feature-div > div h3,
+body.dark-mode .feature-div > div h4,
+body.dark-mode .landlord-card h3{
+    color: #e4e6f0;
+}
+body.dark-mode .icon-A, body.dark-mode .icon-B, body.dark-mode .icon-C{
+    color: #b9c2e0;
+}
+body.dark-mode .Listing-btn{
+    color: #9fb0e0;
+}
+body.dark-mode .landlord-section-label{
+    color: #9fb0e0;
+}
+body.dark-mode .search-bar{
+    background: #1f2140;
+}
+body.dark-mode .search-bar input{
+    background: #1f2140;
+    color: #e4e6f0;
+}
+#themeToggle{
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
